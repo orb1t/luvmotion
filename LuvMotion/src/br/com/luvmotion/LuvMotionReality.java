@@ -334,9 +334,8 @@ public class LuvMotionReality extends ApplicationGL {
 		    gl.glVertex2f(size,size);      //   on the xy-plane, with its
 		    gl.glVertex2f(-size,size);     //   at (0,0,0).
 	    gl.glEnd();
+	    
 	}
-
-
 
 	@Override
 	public void draw(Graphic g) {
@@ -360,7 +359,7 @@ public class LuvMotionReality extends ApplicationGL {
 
 	}
 
-	private void drawPipCamera(Graphic g) {
+	protected void drawPipCamera(Graphic g) {
 
 		//AffineTransform transform = AffineTransform.getScaleInstance(640/w, 480/h);
 		AffineTransform transform = AffineTransform.getScaleInstance(0.2, 0.2);

@@ -243,17 +243,4 @@ public class ImageProcessingGL extends LuvMotionReality{
 		g.drawShadow(20,textHeight+60, "AngleY: "+(angleY),Color.BLACK);
 	}
 
-	private void drawPipCamera(Graphic g) {
-
-		//AffineTransform transform = AffineTransform.getScaleInstance(640/w, 480/h);
-		AffineTransform transform = AffineTransform.getScaleInstance(0.2, 0.2);
-
-		AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-
-		BufferedImage camera = op.filter(pipCamera, null);
-
-		g.drawImage(camera, 0, 0);
-
-	}
-
 }
