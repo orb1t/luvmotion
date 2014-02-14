@@ -8,6 +8,8 @@ import static javax.media.opengl.GL.GL_TEXTURE_MIN_FILTER;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
 import javax.media.opengl.GL;
@@ -19,13 +21,15 @@ import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.event.PointerEvent;
 import br.com.etyllica.core.input.mouse.MouseButton;
 import br.com.etyllica.core.video.Graphic;
+import br.com.etyllica.layer.BufferedLayer;
 import br.com.luvia.core.ApplicationGL;
 import br.com.luvia.loader.TextureLoader;
 import br.com.luvia.util.Camera;
 
+import com.jogamp.opengl.util.awt.Screenshot;
 import com.jogamp.opengl.util.texture.Texture;
 
-public class AugmentedReality extends ApplicationGL {
+public class LuvMotionReality extends ApplicationGL {
 
 	private Texture marker;
 
@@ -40,7 +44,9 @@ public class AugmentedReality extends ApplicationGL {
 	
 	private double angleY = 0;
 
-	public AugmentedReality(int w, int h) {
+	private BufferedImage pipCamera;	
+	
+	public LuvMotionReality(int w, int h) {
 		super(w, h);
 	}
 
@@ -129,36 +135,6 @@ public class AugmentedReality extends ApplicationGL {
 		gl.glEnd();
 	}
 
-	private void drawAxis(GL2 gl) {
-
-		double axisSize = 100;
-
-		//Draw Axis
-		gl.glLineWidth(2.5f);
-
-		//Draw X Axis
-		gl.glColor3d(1.0, 0.0, 0.0);
-		gl.glBegin(GL.GL_LINES);
-		gl.glVertex3d(0.0, 0.0, 0.0);
-		gl.glVertex3d(axisSize, 0, 0);
-		gl.glEnd();
-
-		//Draw Y Axis
-		gl.glColor3d(0.0, 1.0, 0.0);
-		gl.glBegin(GL.GL_LINES);
-		gl.glVertex3d(0.0, 0.0, 0.0);
-		gl.glVertex3d(0, axisSize, 0);
-		gl.glEnd();
-
-		//Draw Z Axis
-		gl.glColor3d(0.0, 0.0, 1.0);
-		gl.glBegin(GL.GL_LINES);
-		gl.glVertex3d(0.0, 0.0, 0.0);
-		gl.glVertex3d(0, 0, axisSize);
-		gl.glEnd();
-
-	}
-
 	@Override
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
 
@@ -231,13 +207,12 @@ public class AugmentedReality extends ApplicationGL {
 
 		return GUIEvent.NONE;
 	}
-
+	
 	@Override
 	public void display(GLAutoDrawable drawable) {
 
 		GL2 gl = drawable.getGL().getGL2();
 
-		//TODO TEST
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 		gl.glClearColor(1f, 1f, 1f, 1);
 				
@@ -248,23 +223,23 @@ public class AugmentedReality extends ApplicationGL {
 		gl.glRotated(angleY, 0, 1, 0);
 
 		//Draw Scene
-		//drawAxis(gl);
 
 		drawFloor(gl);
 		
-
 		gl.glFlush();
-
+	
+		pipCamera = Screenshot.readToBufferedImage(w, h, false);
+				
 	}
 	
 
 	@Override
 	public void draw(Graphic g) {
-
+		
 		int size = 100;
 
-		//g.setColor(Color.RED);
-		//g.fillRect(w/2,50,20,20);
+		g.setColor(Color.RED);
+		g.fillRect(30/2,50,20,20);
 
 		//g.setColor(Color.BLUE);
 		//g.drawRect(w/2-size/2, h/2-size/2, size, size);
@@ -276,12 +251,25 @@ public class AugmentedReality extends ApplicationGL {
 		g.drawShadow(20,40, "AngleX: "+(angleX-5),Color.BLACK);
 		
 		g.drawShadow(20,60, "AngleY: "+(angleY),Color.BLACK);
+				
+		drawPipCamera(g);
 		
 		//g.escreve(20,20,"Scene");
 		//System.out.println("w = "+w);
 		//System.out.println("h = "+h);
 		//g.drawLine(w/2, h/2, w/2+mx, h/2+my);
+		
+	}
+	
+	private void drawPipCamera(Graphic g) {
 
+		AffineTransform transform = AffineTransform.getScaleInstance(0.2, 0.2);
+
+		AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+
+		BufferedImage camera = op.filter(pipCamera, null);
+
+		g.drawImage(camera, 0, 0);
 		
 	}
 	

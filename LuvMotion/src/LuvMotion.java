@@ -1,5 +1,5 @@
 import br.com.luvia.Luvia;
-import examples.AugmentedReality;
+import br.com.luvmotion.LuvMotionReality;
 
 
 public class LuvMotion extends Luvia{
@@ -20,7 +20,7 @@ public class LuvMotion extends Luvia{
 	@Override
 	public void startGame() {
 		
-		setMainApplication(new AugmentedReality(w, h));
+		setMainApplication(new LuvMotionReality(w, h));
 		
 	}
 
