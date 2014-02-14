@@ -15,6 +15,8 @@ import java.awt.image.BufferedImage;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.glu.GLU;
+import javax.media.opengl.glu.GLUquadric;
 
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
@@ -41,9 +43,9 @@ public class LuvMotionReality extends ApplicationGL {
 
 	protected boolean click = false;
 	
-	private double angleX = 0;
+	protected double angleX = 0;
 	
-	private double angleY = 0;
+	protected double angleY = 0;
 	
 	protected BufferedImage pipCamera;
 	
@@ -54,8 +56,16 @@ public class LuvMotionReality extends ApplicationGL {
 	}
 
 	@Override
-	public void init(GLAutoDrawable gl) {
+	public void init(GLAutoDrawable drawable) {
 		
+		GL2 gl = drawable.getGL().getGL2();
+		
+		// Global settings.
+        gl.glEnable(GL.GL_DEPTH_TEST);
+        gl.glDepthFunc(GL.GL_LEQUAL);
+        gl.glShadeModel(GL2.GL_SMOOTH);
+        gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
+        
 	}
 	
 	@Override
@@ -100,8 +110,8 @@ public class LuvMotionReality extends ApplicationGL {
 
 		gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-		drawGrid(gl,200,120);
+		
+		drawGrid(gl,200,120);		
 
 	}
 
@@ -231,10 +241,34 @@ public class LuvMotionReality extends ApplicationGL {
 
 		drawFloor(gl);
 		
-		gl.glFlush();
-	
+		//gl.glFlush();
+			
 		pipCamera = Screenshot.readToBufferedImage(w, h, false);
-				
+						
+	}
+	
+	protected void drawSphere(GLAutoDrawable drawable){
+
+        final float radius = 1.378f;
+        final int slices = 16;
+        final int stacks = 16;
+		
+		GL2 gl = drawable.getGL().getGL2();
+			
+		// Draw sphere (possible styles: FILL, LINE, POINT).
+        gl.glColor3f(0.3f, 0.5f, 1f);
+        gl.glTranslated(0, radius, 0);
+        
+        GLUquadric earth = glu.gluNewQuadric();
+        
+        glu.gluQuadricDrawStyle(earth, GLU.GLU_FILL);
+        glu.gluQuadricNormals(earth, GLU.GLU_FLAT);
+        glu.gluQuadricOrientation(earth, GLU.GLU_OUTSIDE);
+                
+        glu.gluSphere(earth, radius, slices, stacks);
+        
+        glu.gluDeleteQuadric(earth);
+        
 	}
 	
 
@@ -242,12 +276,6 @@ public class LuvMotionReality extends ApplicationGL {
 	public void draw(Graphic g) {
 		
 		int size = 100;
-
-		g.setColor(Color.RED);
-		g.fillRect(30/2,50,20,20);
-
-		//g.setColor(Color.BLUE);
-		//g.drawRect(w/2-size/2, h/2-size/2, size, size);
 
 		//Draw Gui
 		g.setColor(Color.WHITE);
@@ -257,7 +285,7 @@ public class LuvMotionReality extends ApplicationGL {
 		
 		g.drawShadow(20,60, "AngleY: "+(angleY),Color.BLACK);
 				
-		drawPipCamera(g);
+		//drawPipCamera(g);
 		
 		//g.escreve(20,20,"Scene");
 		//System.out.println("w = "+w);
@@ -267,8 +295,6 @@ public class LuvMotionReality extends ApplicationGL {
 	}
 	
 	private void drawPipCamera(Graphic g) {
-
-		
 		
 		//AffineTransform transform = AffineTransform.getScaleInstance(640/w, 480/h);
 		AffineTransform transform = AffineTransform.getScaleInstance(0.2, 0.2);
