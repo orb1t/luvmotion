@@ -1,4 +1,6 @@
 import br.com.luvia.Luvia;
+import br.com.luvia.core.ApplicationGL;
+import br.com.luvmotion.ImageProcessingGL;
 import br.com.luvmotion.LuvMotionReality;
 
 
@@ -18,9 +20,11 @@ public class LuvMotion extends Luvia{
 	}
 	
 	@Override
-	public void startGame() {
+	public ApplicationGL startApplication() {
 		
-		setMainApplication(new LuvMotionReality(w, h));
+		//return new LuvMotionReality(w, h);
+		
+		return new ImageProcessingGL(w, h);
 		
 	}
 

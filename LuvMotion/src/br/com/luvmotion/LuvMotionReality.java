@@ -21,21 +21,22 @@ import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.event.PointerEvent;
 import br.com.etyllica.core.input.mouse.MouseButton;
 import br.com.etyllica.core.video.Graphic;
-import br.com.etyllica.layer.BufferedLayer;
 import br.com.luvia.core.ApplicationGL;
 import br.com.luvia.loader.TextureLoader;
-import br.com.luvia.util.Camera;
+import br.com.luvia.util.CameraGL;
 
 import com.jogamp.opengl.util.awt.Screenshot;
 import com.jogamp.opengl.util.texture.Texture;
 
 public class LuvMotionReality extends ApplicationGL {
-
+	
+	//Scene Stuff
 	private Texture marker;
 
-	private Camera camera;
+	private CameraGL camera;
 	
 	protected float mx = 0;
+	
 	protected float my = 0;
 
 	protected boolean click = false;
@@ -43,8 +44,10 @@ public class LuvMotionReality extends ApplicationGL {
 	private double angleX = 0;
 	
 	private double angleY = 0;
-
-	private BufferedImage pipCamera;	
+	
+	protected BufferedImage pipCamera;
+	
+	protected Color borderColor = Color.RED;
 	
 	public LuvMotionReality(int w, int h) {
 		super(w, h);
@@ -52,29 +55,31 @@ public class LuvMotionReality extends ApplicationGL {
 
 	@Override
 	public void init(GLAutoDrawable gl) {
-				
+		
+	}
+	
+	@Override
+	public void load() {
+	
+		camera = new CameraGL(0,15,1);
+		
 		BufferedImage image = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = image.createGraphics();
 		
+		pipCamera = image;
+				
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, 200, 200);
 		
 		g.setColor(Color.BLUE);
 		g.fillOval(50, 50, 100, 100);
 		
-		g.setColor(Color.BLACK);
+		g.setColor(borderColor);
 		g.setStroke(new BasicStroke(5f));
 		g.drawRect(5, 5, 190, 190);
 		
 		marker = TextureLoader.getInstance().loadTexture(image);
-	}
-	
-	@Override
-	public void load() {
 		
-		camera = new Camera(0,15,1);
-		
-		loading = 100;
 	}
 	
 	protected void lookCamera(GL2 gl) {
@@ -263,6 +268,9 @@ public class LuvMotionReality extends ApplicationGL {
 	
 	private void drawPipCamera(Graphic g) {
 
+		
+		
+		//AffineTransform transform = AffineTransform.getScaleInstance(640/w, 480/h);
 		AffineTransform transform = AffineTransform.getScaleInstance(0.2, 0.2);
 
 		AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
