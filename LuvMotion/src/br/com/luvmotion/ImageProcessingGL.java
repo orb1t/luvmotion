@@ -30,7 +30,7 @@ public class ImageProcessingGL extends LuvMotionReality{
 
 	protected AugmentedMarkerModifier modifier;
 
-	protected boolean hide = true;
+	protected boolean hide = false;
 	protected boolean pixels = true;
 
 	protected int xOffset = 0;
@@ -78,12 +78,6 @@ public class ImageProcessingGL extends LuvMotionReality{
 	public GUIEvent updateKeyboard(KeyEvent event) {
 		super.updateKeyboard(event);
 
-		if(event.isKeyDown(KeyEvent.TSK_SETA_DIREITA)){
-
-			hide = false;
-
-		}
-
 		return GUIEvent.NONE;
 
 	}
@@ -107,8 +101,6 @@ public class ImageProcessingGL extends LuvMotionReality{
 		
 	}
 	
-	
-
 	private void reset(BufferedImage b){
 
 		loading = 60;
@@ -127,6 +119,11 @@ public class ImageProcessingGL extends LuvMotionReality{
 	@Override
 	public void draw(Graphic g) {
 
+		//Title Window Bar = 36 pixels
+		int translateOffset = 36;
+		
+		g.translate(0, -translateOffset);
+		
 		if(!hide){
 
 			//g.drawImage(pipCamera, xOffset, yOffset);
@@ -159,6 +156,8 @@ public class ImageProcessingGL extends LuvMotionReality{
 			}
 
 		}
+		
+		g.translate(0, translateOffset);
 
 	}
 

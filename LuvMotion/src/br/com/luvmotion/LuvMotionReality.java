@@ -248,13 +248,15 @@ public class LuvMotionReality extends ApplicationGL {
 	}
 	
 	protected void drawSphere(GLAutoDrawable drawable){
-
+		
+		GL2 gl = drawable.getGL().getGL2();
+		
         final float radius = 1.378f;
         final int slices = 16;
         final int stacks = 16;
 		
-		GL2 gl = drawable.getGL().getGL2();
-			
+        gl.glPushMatrix();
+        
 		// Draw sphere (possible styles: FILL, LINE, POINT).
         gl.glColor3f(0.3f, 0.5f, 1f);
         gl.glTranslated(0, radius, 0);
@@ -269,12 +271,13 @@ public class LuvMotionReality extends ApplicationGL {
         
         glu.gluDeleteQuadric(earth);
         
+        gl.glPopMatrix();
 	}
 	
 
 	@Override
 	public void draw(Graphic g) {
-		
+				
 		int size = 100;
 
 		//Draw Gui
