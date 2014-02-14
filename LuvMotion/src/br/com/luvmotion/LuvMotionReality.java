@@ -49,8 +49,8 @@ public class LuvMotionReality extends ApplicationGL {
 
 	protected BufferedImage pipCamera;
 
-	protected Color borderColor = Color.RED;
-	
+	protected Color markerColor = Color.BLACK;
+
 	public LuvMotionReality(int w, int h) {
 		super(w, h);
 	}
@@ -84,9 +84,12 @@ public class LuvMotionReality extends ApplicationGL {
 		g.setColor(Color.BLUE);
 		g.fillOval(50, 50, 100, 100);
 
-		g.setColor(borderColor);
-		g.setStroke(new BasicStroke(5f));
-		g.drawRect(5, 5, 190, 190);
+		g.setColor(markerColor);
+
+		int strokeSize = 16;
+
+		g.setStroke(new BasicStroke(strokeSize));
+		g.drawRect(strokeSize, strokeSize, 200-strokeSize*2, 200-strokeSize*2);
 
 		marker = TextureLoader.getInstance().loadTexture(image);
 
@@ -173,7 +176,7 @@ public class LuvMotionReality extends ApplicationGL {
 
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 
-		gl.glLoadIdentity();
+		//gl.glLoadIdentity();
 
 	}	
 
@@ -245,6 +248,11 @@ public class LuvMotionReality extends ApplicationGL {
 
 		pipCamera = Screenshot.readToBufferedImage(w, h, false);
 
+		//Erasing Window Title Black Rectangle
+		pipCamera.getGraphics().setColor(Color.WHITE);
+
+		pipCamera.getGraphics().fillRect(0, 0, w, 50);
+
 	}
 
 	protected void drawSphere(GL2 gl){
@@ -257,7 +265,7 @@ public class LuvMotionReality extends ApplicationGL {
 
 		// Draw sphere (possible styles: FILL, LINE, POINT).
 		gl.glColor3f(0.3f, 0.5f, 1f);
-		
+
 		gl.glTranslated(0, radius, 0);
 
 		GLUquadric earth = glu.gluNewQuadric();
@@ -274,21 +282,21 @@ public class LuvMotionReality extends ApplicationGL {
 	}
 
 	protected void drawCube(GL2 gl){
-		
+
 		float x = 0;
-		
+
 		float y = 0;
-		
+
 		float z = 0;
-		
+
 		gl.glColor3f(0.3f, 0.5f, 1f);
-		
+
 		gl.glPushMatrix();
-		
+
 		gl.glTranslated(0, 0.5, 0);
-		
+
 		gl.glTranslated(x, y, z);
-		
+
 		gl.glPushMatrix();
 		drawSquare(gl);        // front face is red
 		gl.glPopMatrix();
@@ -317,24 +325,62 @@ public class LuvMotionReality extends ApplicationGL {
 		gl.glRotatef(90,1,0,0); // rotate square to bottom face
 		drawSquare(gl);
 		gl.glPopMatrix();
+
+		gl.glPopMatrix();
+
+	}
+
+	protected void drawPyramid(GL2 gl){
+
+		gl.glPushMatrix();
+		gl.glScaled(1.8, 1.8, 1.8);
+		
+		gl.glTranslated(0, 1, 0);
+		
+		gl.glBegin(GL.GL_TRIANGLES);        // Drawing Using Triangles
+		gl.glColor3f(1.0f, 0.0f, 0.0f);     // Red
+		gl.glVertex3f(0.0f, 1.0f, 0.0f);    // Top Of Triangle (Front)
+		gl.glColor3f(0.0f, 1.0f, 0.0f);     // Green
+		gl.glVertex3f(-1.0f, -1.0f, 1.0f);  // Left Of Triangle (Front)
+		gl.glColor3f(0.0f, 0.0f, 1.0f);     // Blue
+		gl.glVertex3f(1.0f, -1.0f, 1.0f);   // Right Of Triangle (Front)
+		gl.glColor3f(1.0f, 0.0f, 0.0f);     // Red
+		gl.glVertex3f(0.0f, 1.0f, 0.0f);    // Top Of Triangle (Right)
+		gl.glColor3f(0.0f, 0.0f, 1.0f);     // Blue
+		gl.glVertex3f(1.0f, -1.0f, 1.0f);   // Left Of Triangle (Right)
+		gl.glColor3f(0.0f, 1.0f, 0.0f);     // Green
+		gl.glVertex3f(1.0f, -1.0f, -1.0f);  // Right Of Triangle (Right)
+		gl.glColor3f(1.0f, 0.0f, 0.0f);     // Red
+		gl.glVertex3f(0.0f, 1.0f, 0.0f);    // Top Of Triangle (Back)
+		gl.glColor3f(0.0f, 1.0f, 0.0f);     // Green
+		gl.glVertex3f(1.0f, -1.0f, -1.0f);  // Left Of Triangle (Back)
+		gl.glColor3f(0.0f, 0.0f, 1.0f);     // Blue
+		gl.glVertex3f(-1.0f, -1.0f, -1.0f); // Right Of Triangle (Back)
+		gl.glColor3f(1.0f, 0.0f, 0.0f);     // Red
+		gl.glVertex3f(0.0f, 1.0f, 0.0f);    // Top Of Triangle (Left)
+		gl.glColor3f(0.0f, 0.0f, 1.0f);     // Blue
+		gl.glVertex3f(-1.0f, -1.0f, -1.0f); // Left Of Triangle (Left)
+		gl.glColor3f(0.0f, 1.0f, 0.0f);     // Green
+		gl.glVertex3f(-1.0f, -1.0f, 1.0f);  // Right Of Triangle (Left)
+		gl.glEnd();                         // Finished Drawing The Triangle
 		
 		gl.glPopMatrix();
-		
+
 	}
-	
+
 	private void drawSquare(GL2 gl) {
-	    
+
 		float size = 1;
-		
+
 		gl.glTranslatef(0,0,size);
-		
-	    gl.glBegin(GL.GL_TRIANGLE_FAN);
-		    gl.glVertex2f(-size,-size);    // Draw the square (before the
-		    gl.glVertex2f(size,-size);     //   the translation is applied)
-		    gl.glVertex2f(size,size);      //   on the xy-plane, with its
-		    gl.glVertex2f(-size,size);     //   at (0,0,0).
-	    gl.glEnd();
-	    
+
+		gl.glBegin(GL.GL_TRIANGLE_FAN);
+		gl.glVertex2f(-size,-size);    // Draw the square (before the
+		gl.glVertex2f(size,-size);     //   the translation is applied)
+		gl.glVertex2f(size,size);      //   on the xy-plane, with its
+		gl.glVertex2f(-size,size);     //   at (0,0,0).
+		gl.glEnd();
+
 	}
 
 	@Override

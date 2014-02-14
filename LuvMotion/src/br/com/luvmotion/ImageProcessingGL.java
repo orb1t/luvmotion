@@ -18,7 +18,7 @@ import br.com.etyllica.motion.filter.color.ColorStrategy;
 import br.com.etyllica.motion.filter.modifier.AugmentedMarkerModifier;
 import br.com.etyllica.motion.filter.search.FloodFillSearch;
 
-public class ImageProcessingGL extends LuvMotionReality{
+public class ImageProcessingGL extends LuvMotionReality {
 
 	//Image Processing Stuff	
 	protected FloodFillSearch cornerFilter;
@@ -55,7 +55,7 @@ public class ImageProcessingGL extends LuvMotionReality{
 
 		loading = 40;
 
-		colorStrategy = new ColorStrategy(borderColor);
+		colorStrategy = new ColorStrategy(markerColor);
 		colorStrategy.setTolerance(0x30);
 
 		modifier = new AugmentedMarkerModifier();
@@ -102,7 +102,8 @@ public class ImageProcessingGL extends LuvMotionReality{
 			if(drawSphere){
 				drawSphere(gl);
 			}else{
-				drawCube(gl);
+				//drawCube(gl);
+				drawPyramid(gl);
 			}
 			
 			if(feature!=null){
@@ -156,15 +157,7 @@ public class ImageProcessingGL extends LuvMotionReality{
 
 				if(feature.getPoints().size()>3){
 
-					drawBox(g, feature);
-
-					g.drawString("Filter", 20, textHeight+100);
-
-					g.drawString("Points = "+feature.getPoints().size(), 20, textHeight+125);
-
-					g.drawString("AngleX = "+modifier.getAngleX(), 20, textHeight+150);
-
-					g.drawString("AngleY = "+modifier.getAngleY(), 20, textHeight+175);
+					drawFilterData(g);
 
 				}
 			}
@@ -173,6 +166,40 @@ public class ImageProcessingGL extends LuvMotionReality{
 		
 		g.translate(0, translateOffset);
 
+	}
+	
+	private void drawFilterData(Graphic g){
+		
+		drawBox(g, feature);
+
+		g.drawString("Filter", 20, textHeight+100);
+
+		g.drawString("Points = "+feature.getPoints().size(), 20, textHeight+125);
+
+		g.drawString("AngleX = "+modifier.getAngleX(), 20, textHeight+150);
+
+		g.drawString("AngleY = "+modifier.getAngleY(), 20, textHeight+175);
+		
+		Point2D a = feature.getPoints().get(0);
+		Point2D b = feature.getPoints().get(1);
+		Point2D c = feature.getPoints().get(2);
+		Point2D d = feature.getPoints().get(3);
+		
+		Point2D ac = new Point2D((a.getX()+c.getX())/2, (a.getY()+c.getY())/2);
+		Point2D ab = new Point2D((a.getX()+b.getX())/2, (a.getY()+b.getY())/2);
+
+		Point2D bd = new Point2D((b.getX()+d.getX())/2, (b.getY()+d.getY())/2);
+		Point2D cd = new Point2D((c.getX()+d.getX())/2, (c.getY()+d.getY())/2);
+		
+		g.drawString("Dist(AB) = "+a.distance(b), 20, textHeight+225);
+		g.drawString("Dist(AC) = "+a.distance(c), 20, textHeight+250);
+		g.drawString("Dist(DB) = "+d.distance(b), 20, textHeight+275);
+		g.drawString("Dist(DC) = "+d.distance(c), 20, textHeight+300);
+		
+		g.drawString("Dist((AC)~(BD)) = "+ac.distance(bd), 20, textHeight+325);
+		g.drawString("Dist((AB)~(CD)) = "+ab.distance(cd), 20, textHeight+350);
+		
+		g.drawString("Lateral Distance = "+modifier.getLateralDistance(), 20, textHeight+375);
 	}
 
 	private void drawBox(Graphic g, Component box){
