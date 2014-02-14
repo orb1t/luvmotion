@@ -5,11 +5,8 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
-import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.glu.GLU;
-import javax.media.opengl.glu.GLUquadric;
 
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
@@ -39,6 +36,8 @@ public class ImageProcessingGL extends LuvMotionReality{
 	protected Component feature;
 
 	private int textHeight = 125;
+	
+	private boolean drawSphere = true;
 
 	public ImageProcessingGL(int w, int h) {
 		super(w, h);
@@ -78,18 +77,33 @@ public class ImageProcessingGL extends LuvMotionReality{
 	public GUIEvent updateKeyboard(KeyEvent event) {
 		super.updateKeyboard(event);
 
+		if(event.isKeyDown(KeyEvent.TSK_SPACE)){
+			drawSphere = !drawSphere;
+		}
+		
 		return GUIEvent.NONE;
 
 	}
 
 	public void display(GLAutoDrawable drawable) {
+		
+		GL2 gl = drawable.getGL().getGL2();
+		
+		//gl.glPushMatrix();
+		//Draw Marker Scene
 		super.display(drawable);
+		
+		//gl.glPopMatrix();
 		
 		if(!hide){
 
 			reset(pipCamera);
 
-			drawSphere(drawable);
+			if(drawSphere){
+				drawSphere(gl);
+			}else{
+				drawCube(gl);
+			}
 			
 			if(feature!=null){
 				
