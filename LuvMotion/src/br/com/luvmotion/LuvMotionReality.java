@@ -35,7 +35,7 @@ public class LuvMotionReality extends ApplicationGL {
 	//Scene Stuff
 	private Texture marker;
 
-	private CameraGL camera;
+	protected CameraGL cameraGL;
 
 	protected float mx = 0;
 
@@ -46,6 +46,8 @@ public class LuvMotionReality extends ApplicationGL {
 	protected double angleX = 0;
 
 	protected double angleY = 0;
+	
+	protected double angleZ = 0;
 
 	protected BufferedImage pipCamera;
 
@@ -71,7 +73,7 @@ public class LuvMotionReality extends ApplicationGL {
 	@Override
 	public void load() {
 
-		camera = new CameraGL(0,15,1);
+		cameraGL = new CameraGL(0,15,1);
 
 		BufferedImage image = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = image.createGraphics();
@@ -103,7 +105,7 @@ public class LuvMotionReality extends ApplicationGL {
 		double targety = 0;
 		double targetz = 0;
 
-		glu.gluLookAt( camera.getX(), camera.getY(), camera.getZ(), targetx, targety, targetz, 0, 1, 0 );
+		glu.gluLookAt( cameraGL.getX(), cameraGL.getY(), cameraGL.getZ(), targetx, targety, targetz, 0, 1, 0 );
 
 	}
 
@@ -204,6 +206,17 @@ public class LuvMotionReality extends ApplicationGL {
 			angleY -= 5;
 
 		}
+		
+		if(event.isKeyDown(KeyEvent.TSK_M)){
+
+			angleZ -= 5;
+
+		}
+		else if(event.isKeyDown(KeyEvent.TSK_N)){
+
+			angleZ += 5;
+
+		}
 
 		return GUIEvent.NONE;
 	}
@@ -214,12 +227,12 @@ public class LuvMotionReality extends ApplicationGL {
 		my = event.getY();
 
 		if(event.onButtonDown(MouseButton.MOUSE_BUTTON_LEFT)){
-			camera.setZ(camera.getZ()+0.1f);
+			cameraGL.setZ(cameraGL.getZ()+0.1f);
 			click = true;
 		}
 
 		if(event.onButtonUp(MouseButton.MOUSE_BUTTON_LEFT)){
-			camera.setZ(camera.getZ()-0.1f);
+			cameraGL.setZ(cameraGL.getZ()-0.1f);
 			click = false;
 		}
 
@@ -239,6 +252,7 @@ public class LuvMotionReality extends ApplicationGL {
 
 		gl.glRotated(angleX, 1, 0, 0);
 		gl.glRotated(angleY, 0, 1, 0);
+		gl.glRotated(angleZ, 0, 0, 1);
 
 		//Draw Scene
 

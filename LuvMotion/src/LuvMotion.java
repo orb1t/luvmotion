@@ -1,9 +1,10 @@
 import br.com.luvia.Luvia;
 import br.com.luvia.core.ApplicationGL;
 import br.com.luvmotion.ImageProcessingGL;
+import br.com.luvmotion.PositProcessingGL;
 
 
-public class LuvMotion extends Luvia{
+public class LuvMotion extends Luvia {
 
 	public LuvMotion() {
 		super(1024,576);
@@ -23,7 +24,8 @@ public class LuvMotion extends Luvia{
 		
 		//return new LuvMotionReality(w, h);
 		
-		return new ImageProcessingGL(w, h);
+		//return new ImageProcessingGL(w, h);
+		return new PositProcessingGL(w, h);
 		
 	}
 

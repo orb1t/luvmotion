@@ -17,7 +17,7 @@ import br.com.etyllica.motion.filter.modifier.AugmentedMarkerModifier;
 import br.com.etyllica.motion.filter.modifier.PositCoplanarModifier;
 import br.com.etyllica.motion.filter.search.FloodFillSearch;
 
-public class ImageProcessingGL extends LuvMotionReality {
+public class PositProcessingGL extends LuvMotionReality {
 
 	//Image Processing Stuff	
 	protected FloodFillSearch cornerFilter;
@@ -40,7 +40,7 @@ public class ImageProcessingGL extends LuvMotionReality {
 	
 	private boolean drawSphere = true;
 
-	public ImageProcessingGL(int w, int h) {
+	public PositProcessingGL(int w, int h) {
 		super(w, h);
 	}
 
@@ -57,15 +57,17 @@ public class ImageProcessingGL extends LuvMotionReality {
 		loading = 40;
 
 		colorStrategy = new ColorStrategy(markerColor);
+		
 		colorStrategy.setTolerance(0x30);
 
 		modifier = new AugmentedMarkerModifier();
 		
 		positModifier = new PositCoplanarModifier(width, height);
-
+		
 		cornerFilter = new FloodFillSearch(width, height);
 
 		cornerFilter.setBorder(30);
+		
 		cornerFilter.setStep(1);
 
 		cornerFilter.setColorStrategy(colorStrategy);
@@ -126,7 +128,7 @@ public class ImageProcessingGL extends LuvMotionReality {
 		loadingPhrase = "Start Filter";
 
 		feature = cornerFilter.filterFirst(b, new BoundingComponent(b.getWidth(), b.getHeight()));
-
+		
 		positModifier.modifyComponent(feature);
 		
 		loading = 65;
@@ -177,7 +179,8 @@ public class ImageProcessingGL extends LuvMotionReality {
 		
 		drawBox(g, feature);
 
-		g.drawString("Filter", 20, textHeight+100);
+		//g.drawString("Filter", 20, textHeight+100);
+		g.drawString("Filter(Posit/angle): "+positModifier.getAngle(), 20, textHeight+100);
 
 		g.drawString("Points = "+feature.getPoints().size(), 20, textHeight+125);
 
@@ -200,18 +203,19 @@ public class ImageProcessingGL extends LuvMotionReality {
 		Point2D bd = new Point2D((b.getX()+d.getX())/2, (b.getY()+d.getY())/2);
 		Point2D cd = new Point2D((c.getX()+d.getX())/2, (c.getY()+d.getY())/2);
 		
-		g.drawString("Dist(AB) = "+a.distance(b), 20, textHeight+225);
-		g.drawString("Dist(AC) = "+a.distance(c), 20, textHeight+250);
-		g.drawString("Dist(DB) = "+d.distance(b), 20, textHeight+275);
-		g.drawString("Dist(DC) = "+d.distance(c), 20, textHeight+300);
+		g.drawString("Dist(AB) = "+a.distance(b), 20, textHeight+250);
+		g.drawString("Dist(AC) = "+a.distance(c), 20, textHeight+275);
+		g.drawString("Dist(DB) = "+d.distance(b), 20, textHeight+300);
+		g.drawString("Dist(DC) = "+d.distance(c), 20, textHeight+325);
 		
 		/*g.drawString("Dist((AC)~(BD)) = "+ac.distance(bd), 20, textHeight+325);
 		g.drawString("Dist((AB)~(CD)) = "+ab.distance(cd), 20, textHeight+350);*/
 				
-		g.drawString("Dist((AC/AB)) = "+Double.toString(a.distance(c)/a.distance(b)), 20, textHeight+325);
-		g.drawString("Dist((BD/CD)) = "+Double.toString(b.distance(d)/c.distance(d)), 20, textHeight+350);
-		g.drawString("Dist((AC/AB)*(CD/BD)) = "+Double.toString((a.distance(c)/a.distance(b))*(d.distance(c)/b.distance(d))), 20, textHeight+375);
+		g.drawString("Dist((AC/AB)) = "+Double.toString(a.distance(c)/a.distance(b)), 20, textHeight+350);
+		g.drawString("Dist((BD/CD)) = "+Double.toString(b.distance(d)/c.distance(d)), 20, textHeight+375);
+		g.drawString("Dist((AC/AB)*(CD/BD)) = "+Double.toString((a.distance(c)/a.distance(b))*(d.distance(c)/b.distance(d))), 20, textHeight+400);
 		
+		//g.drawString("Lateral Distance = "+modifier.getLateralDistance(), 20, textHeight+400);
 	}
 
 	private void drawBox(Graphic g, Component box){
