@@ -10,7 +10,6 @@ import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.video.Graphic;
 import br.com.etyllica.linear.Point2D;
-import br.com.etyllica.motion.features.BoundingComponent;
 import br.com.etyllica.motion.features.Component;
 import br.com.etyllica.motion.filter.color.ColorStrategy;
 import br.com.etyllica.motion.filter.modifier.AugmentedMarkerModifier;
@@ -72,7 +71,7 @@ public class ImageProcessingGL extends LuvMotionReality {
 
 		cornerFilter.setComponentModifierStrategy(modifier);
 
-		feature = new BoundingComponent(w, h);
+		feature = new Component(w, h);
 
 	}
 
@@ -125,7 +124,7 @@ public class ImageProcessingGL extends LuvMotionReality {
 
 		loadingPhrase = "Start Filter";
 
-		feature = cornerFilter.filterFirst(b, new BoundingComponent(b.getWidth(), b.getHeight()));
+		feature = cornerFilter.filterFirst(b, new Component(b.getWidth(), b.getHeight()));
 
 		positModifier.modifyComponent(feature);
 		
@@ -181,13 +180,13 @@ public class ImageProcessingGL extends LuvMotionReality {
 
 		g.drawString("Points = "+feature.getPoints().size(), 20, textHeight+125);
 
-		g.drawString("Angle = "+positModifier.getAngle(), 20, textHeight+150);
+		g.drawString("Angle = "+positModifier.getAxis().getAngle(), 20, textHeight+150);
 		
-		g.drawString("AxisX = "+positModifier.getAxisX(), 20, textHeight+175);
+		g.drawString("AxisX = "+positModifier.getAxis().getAxisX(), 20, textHeight+175);
 
-		g.drawString("AxisY = "+positModifier.getAxisY(), 20, textHeight+200);
+		g.drawString("AxisY = "+positModifier.getAxis().getAxisY(), 20, textHeight+200);
 		
-		g.drawString("AxisZ = "+positModifier.getAxisZ(), 20, textHeight+225);
+		g.drawString("AxisZ = "+positModifier.getAxis().getAxisZ(), 20, textHeight+225);
 		
 		Point2D a = feature.getPoints().get(0);
 		Point2D b = feature.getPoints().get(1);
