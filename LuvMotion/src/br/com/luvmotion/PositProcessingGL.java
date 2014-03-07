@@ -73,7 +73,7 @@ public class PositProcessingGL extends LuvMotionReality {
 
 		cornerFilter.setComponentModifierStrategy(modifier);
 
-		feature = new Component(w, h);
+		feature = new Component(0, 0, w, h);
 
 	}
 
@@ -104,10 +104,10 @@ public class PositProcessingGL extends LuvMotionReality {
 			reset(pipCamera);
 
 			if(drawSphere){
-				drawSphere(gl);
+				//drawSphere(gl);
 			}else{
 				//drawCube(gl);
-				drawPyramid(gl);
+				//drawPyramid(gl);
 			}
 			
 			if(feature!=null){
@@ -118,6 +118,49 @@ public class PositProcessingGL extends LuvMotionReality {
 			
 		}
 		
+		if(feature.getPoints().size()>3) {
+
+			resetScene(gl);
+			
+			double angle = -positModifier.getAxis().getAngle();
+			double x = -positModifier.getAxis().getAxisX();
+			double y = -positModifier.getAxis().getAxisZ();
+			double z = -positModifier.getAxis().getAxisY();
+			
+			gl.glRotated(angle, x, y, z);
+			
+		}
+		
+		drawAxis(gl);
+
+		
+	}
+	
+	private void resetScene(GL2 gl){
+		gl.glLoadIdentity();
+		lookCamera(gl);
+	}
+	
+	private void drawAxis(GL2 gl) {
+				
+		float axisSize = 5;
+		
+		gl.glLineWidth(3);
+		
+		gl.glBegin(GL2.GL_LINES);
+		gl.glColor3f(1, 0, 0);
+		gl.glVertex3f(0, 0, 0);
+		gl.glVertex3f(axisSize, 0, 0);
+
+		gl.glColor3f(0, 1, 0);
+		gl.glVertex3f(0, 0, 0);
+		gl.glVertex3f(0, axisSize, 0);
+
+		gl.glColor3f(0, 0, 1);
+		gl.glVertex3f(0, 0, 0);
+		gl.glVertex3f(0, 0, axisSize);
+		gl.glEnd();
+		
 	}
 	
 	private void reset(BufferedImage b){
@@ -126,7 +169,7 @@ public class PositProcessingGL extends LuvMotionReality {
 
 		loadingPhrase = "Start Filter";
 
-		feature = cornerFilter.filterFirst(b, new Component(b.getWidth(), b.getHeight()));
+		feature = cornerFilter.filterFirst(b, new Component(0, 0, b.getWidth(), b.getHeight()));
 		
 		positModifier.modifyComponent(feature);
 		
