@@ -344,6 +344,7 @@ public class LuvMotionReality extends ApplicationGL {
 
 	}
 
+	//Drawing Nehe Pyramid
 	protected void drawPyramid(GL2 gl){
 
 		gl.glPushMatrix();
