@@ -25,6 +25,7 @@ public class LuvMotion extends Luvia {
 		//return new LuvMotionReality(w, h);
 		
 		//return new ImageProcessingGL(w, h);
+		
 		return new PositProcessingGL(w, h);
 		
 	}

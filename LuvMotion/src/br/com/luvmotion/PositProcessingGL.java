@@ -10,7 +10,7 @@ import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.video.Graphic;
 import br.com.etyllica.linear.Point2D;
-import br.com.etyllica.motion.features.Component;
+import br.com.etyllica.motion.core.features.Component;
 import br.com.etyllica.motion.filter.color.ColorStrategy;
 import br.com.etyllica.motion.filter.modifier.AugmentedMarkerModifier;
 import br.com.etyllica.motion.filter.modifier.PositCoplanarModifier;
@@ -18,7 +18,7 @@ import br.com.etyllica.motion.filter.search.FloodFillSearch;
 
 public class PositProcessingGL extends LuvMotionReality {
 
-	//Image Processing Stuff	
+	//Image Processing Stuff
 	protected FloodFillSearch cornerFilter;
 
 	protected ColorStrategy colorStrategy;
@@ -69,7 +69,7 @@ public class PositProcessingGL extends LuvMotionReality {
 		
 		cornerFilter.setStep(1);
 
-		cornerFilter.setColorStrategy(colorStrategy);
+		cornerFilter.setPixelStrategy(colorStrategy);
 
 		cornerFilter.setComponentModifierStrategy(modifier);
 
@@ -122,10 +122,10 @@ public class PositProcessingGL extends LuvMotionReality {
 
 			resetScene(gl);
 			
-			double angle = -positModifier.getAxis().getAngle();
-			double x = -positModifier.getAxis().getAxisX();
-			double y = -positModifier.getAxis().getAxisZ();
-			double z = -positModifier.getAxis().getAxisY();
+			double angle = positModifier.getAxis().getAngle();
+			double x = positModifier.getAxis().getAxisX();
+			double y = positModifier.getAxis().getAxisZ();
+			double z = positModifier.getAxis().getAxisY();
 			
 			gl.glRotated(angle, x, y, z);
 			
@@ -154,7 +154,7 @@ public class PositProcessingGL extends LuvMotionReality {
 
 		gl.glColor3f(0, 1, 0);
 		gl.glVertex3f(0, 0, 0);
-		gl.glVertex3f(0, axisSize, 0);
+		gl.glVertex3f(0, -axisSize, 0);
 
 		gl.glColor3f(0, 0, 1);
 		gl.glVertex3f(0, 0, 0);
