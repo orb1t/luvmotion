@@ -10,7 +10,7 @@ import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.video.Graphic;
 import br.com.etyllica.linear.Point2D;
-import br.com.etyllica.motion.features.Component;
+import br.com.etyllica.motion.core.features.Component;
 import br.com.etyllica.motion.filter.color.ColorStrategy;
 import br.com.etyllica.motion.filter.modifier.AugmentedMarkerModifier;
 import br.com.etyllica.motion.filter.modifier.PositCoplanarModifier;
@@ -69,7 +69,7 @@ public class PositProcessingGL extends LuvMotionReality {
 		
 		cornerFilter.setStep(1);
 
-		cornerFilter.setColorStrategy(colorStrategy);
+		cornerFilter.setPixelStrategy(colorStrategy);
 
 		cornerFilter.setComponentModifierStrategy(modifier);
 
