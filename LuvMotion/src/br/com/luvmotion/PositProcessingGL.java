@@ -18,7 +18,7 @@ import br.com.etyllica.motion.filter.search.FloodFillSearch;
 
 public class PositProcessingGL extends LuvMotionReality {
 
-	//Image Processing Stuff	
+	//Image Processing Stuff
 	protected FloodFillSearch cornerFilter;
 
 	protected ColorStrategy colorStrategy;
@@ -37,14 +37,14 @@ public class PositProcessingGL extends LuvMotionReality {
 
 	private int textHeight = 125;
 	
-	private boolean drawSphere = true;
+	private boolean drawSphere = false;
 
 	public PositProcessingGL(int w, int h) {
 		super(w, h);
 	}
 
 	@Override
-	public void load(){
+	public void load() {
 		super.load();
 
 		loadingPhrase = "Configuring Filter";
@@ -81,7 +81,7 @@ public class PositProcessingGL extends LuvMotionReality {
 	public GUIEvent updateKeyboard(KeyEvent event) {
 		super.updateKeyboard(event);
 
-		if(event.isKeyDown(KeyEvent.TSK_SPACE)){
+		if(event.isKeyDown(KeyEvent.TSK_SPACE)) {
 			drawSphere = !drawSphere;
 		}
 		
@@ -98,45 +98,42 @@ public class PositProcessingGL extends LuvMotionReality {
 		super.display(drawable);
 		
 		//gl.glPopMatrix();
-		
-		if(!hide){
-
-			reset(pipCamera);
-
-			if(drawSphere){
-				//drawSphere(gl);
-			}else{
-				//drawCube(gl);
-				//drawPyramid(gl);
-			}
-			
-			if(feature!=null){
 				
-				//drawSphere(drawable);
-				
-			}
-			
-		}
-		
 		if(feature.getPoints().size()>3) {
 
 			resetScene(gl);
 			
-			double angle = -positModifier.getAxis().getAngle();
-			double x = -positModifier.getAxis().getAxisX();
-			double y = -positModifier.getAxis().getAxisZ();
-			double z = -positModifier.getAxis().getAxisY();
+			double angle = positModifier.getAxis().getAngle();
+			double x = positModifier.getAxis().getAxisX();
+			double y = positModifier.getAxis().getAxisZ();
+			double z = positModifier.getAxis().getAxisY();
 			
-			gl.glRotated(angle, x, y, z);
+			gl.glRotated(angle, x, y, z);			
 			
 		}
-		
-		drawAxis(gl);
+				
+		if(!hide) {
+
+			drawAxis(gl);
+			
+			//Flip Y Axis
+			//gl.glScalef(1.f, -1.f, 1.f);
+			
+			calculate(pipCamera);
+
+			if(drawSphere) {
+				drawSphere(gl);
+			}else{
+				//drawCube(gl);
+				drawPyramid(gl);
+			}
+			
+		}
 
 		
 	}
 	
-	private void resetScene(GL2 gl){
+	private void resetScene(GL2 gl) {
 		gl.glLoadIdentity();
 		lookCamera(gl);
 	}
@@ -154,7 +151,7 @@ public class PositProcessingGL extends LuvMotionReality {
 
 		gl.glColor3f(0, 1, 0);
 		gl.glVertex3f(0, 0, 0);
-		gl.glVertex3f(0, axisSize, 0);
+		gl.glVertex3f(0, -axisSize, 0);
 
 		gl.glColor3f(0, 0, 1);
 		gl.glVertex3f(0, 0, 0);
@@ -163,7 +160,7 @@ public class PositProcessingGL extends LuvMotionReality {
 		
 	}
 	
-	private void reset(BufferedImage b){
+	private void calculate(BufferedImage b) {
 
 		loading = 60;
 
@@ -188,7 +185,7 @@ public class PositProcessingGL extends LuvMotionReality {
 		
 		g.translate(0, -translateOffset);
 		
-		if(!hide){
+		if(!hide) {
 
 			//g.drawImage(pipCamera, xOffset, yOffset);
 
@@ -196,15 +193,15 @@ public class PositProcessingGL extends LuvMotionReality {
 
 			drawSceneData(g);
 
-			if(feature!=null){
+			if(feature!=null) {
 
 				g.setColor(Color.BLUE);
 
-				for(Point2D ponto: feature.getPoints()){
+				for(Point2D ponto: feature.getPoints()) {
 					g.fillCircle(xOffset+(int)ponto.getX(), yOffset+(int)ponto.getY(), 5);
 				}
 
-				if(feature.getPoints().size()>3){
+				if(feature.getPoints().size()>3) {
 
 					drawFilterData(g);
 
@@ -217,7 +214,7 @@ public class PositProcessingGL extends LuvMotionReality {
 
 	}
 	
-	private void drawFilterData(Graphic g){
+	private void drawFilterData(Graphic g) {
 		
 		drawBox(g, feature);
 
@@ -260,7 +257,7 @@ public class PositProcessingGL extends LuvMotionReality {
 		//g.drawString("Lateral Distance = "+modifier.getLateralDistance(), 20, textHeight+400);
 	}
 
-	private void drawBox(Graphic g, Component box){
+	private void drawBox(Graphic g, Component box) {
 
 		g.setColor(Color.RED);
 
