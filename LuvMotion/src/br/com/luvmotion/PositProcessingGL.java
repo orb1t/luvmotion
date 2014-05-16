@@ -8,13 +8,13 @@ import javax.media.opengl.GLAutoDrawable;
 
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
-import br.com.etyllica.core.video.Graphic;
+import br.com.etyllica.core.graphics.Graphic;
 import br.com.etyllica.linear.Point2D;
 import br.com.etyllica.motion.core.features.Component;
 import br.com.etyllica.motion.filter.color.ColorStrategy;
-import br.com.etyllica.motion.filter.modifier.AugmentedMarkerModifier;
-import br.com.etyllica.motion.filter.modifier.PositCoplanarModifier;
 import br.com.etyllica.motion.filter.search.FloodFillSearch;
+import br.com.etyllica.motion.modifier.AugmentedMarkerModifier;
+import br.com.etyllica.motion.modifier.PositCoplanarModifier;
 
 public class PositProcessingGL extends LuvMotionReality {
 
@@ -135,7 +135,7 @@ public class PositProcessingGL extends LuvMotionReality {
 	
 	private void resetScene(GL2 gl) {
 		gl.glLoadIdentity();
-		lookCamera(gl);
+		updateCamera(gl, cameraGL);
 	}
 	
 	private void drawAxis(GL2 gl) {

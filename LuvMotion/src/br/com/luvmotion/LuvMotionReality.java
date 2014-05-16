@@ -21,8 +21,8 @@ import javax.media.opengl.glu.GLUquadric;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.event.PointerEvent;
+import br.com.etyllica.core.graphics.Graphic;
 import br.com.etyllica.core.input.mouse.MouseButton;
-import br.com.etyllica.core.video.Graphic;
 import br.com.luvia.core.ApplicationGL;
 import br.com.luvia.loader.TextureLoader;
 import br.com.luvia.util.CameraGL;
@@ -94,18 +94,6 @@ public class LuvMotionReality extends ApplicationGL {
 		g.drawRect(strokeSize, strokeSize, 200-strokeSize*2, 200-strokeSize*2);
 
 		marker = TextureLoader.getInstance().loadTexture(image);
-
-	}
-
-	protected void lookCamera(GL2 gl) {
-		gl.glMatrixMode(GL2.GL_MODELVIEW);
-		gl.glLoadIdentity();
-
-		double targetx = 0;
-		double targety = 0;
-		double targetz = 0;
-
-		glu.gluLookAt( cameraGL.getX(), cameraGL.getY(), cameraGL.getZ(), targetx, targety, targetz, 0, 1, 0 );
 
 	}
 
@@ -248,7 +236,7 @@ public class LuvMotionReality extends ApplicationGL {
 		gl.glClearColor(1f, 1f, 1f, 1);
 
 		//Transform by Camera
-		lookCamera(drawable.getGL().getGL2());
+		updateCamera(gl, cameraGL);
 
 		gl.glRotated(angleX, 1, 0, 0);
 		gl.glRotated(angleY, 0, 1, 0);
