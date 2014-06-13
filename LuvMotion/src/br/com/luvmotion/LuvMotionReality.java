@@ -18,6 +18,7 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
 
+import br.com.abby.util.CameraGL;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.event.PointerEvent;
@@ -25,7 +26,6 @@ import br.com.etyllica.core.graphics.Graphic;
 import br.com.etyllica.core.input.mouse.MouseButton;
 import br.com.luvia.core.ApplicationGL;
 import br.com.luvia.loader.TextureLoader;
-import br.com.luvia.util.CameraGL;
 
 import com.jogamp.opengl.util.awt.Screenshot;
 import com.jogamp.opengl.util.texture.Texture;
@@ -173,34 +173,34 @@ public class LuvMotionReality extends ApplicationGL {
 	@Override
 	public GUIEvent updateKeyboard(KeyEvent event) {
 
-		if(event.isKeyDown(KeyEvent.TSK_UP_ARROW)){
+		if(event.isKeyDown(KeyEvent.TSK_UP_ARROW)) {
 
 			angleX += 5;
 
 		}
-		else if(event.isKeyDown(KeyEvent.TSK_DOWN_ARROW)){
+		else if(event.isKeyDown(KeyEvent.TSK_DOWN_ARROW)) {
 
 			angleX -= 5;
 
 		}
 
-		if(event.isKeyDown(KeyEvent.TSK_LEFT_ARROW)){
+		if(event.isKeyDown(KeyEvent.TSK_LEFT_ARROW)) {
 
 			angleY += 5;
 
 		}
-		else if(event.isKeyDown(KeyEvent.TSK_RIGHT_ARROW)){
+		else if(event.isKeyDown(KeyEvent.TSK_RIGHT_ARROW)) {
 
 			angleY -= 5;
 
 		}
 		
-		if(event.isKeyDown(KeyEvent.TSK_M)){
+		if(event.isKeyDown(KeyEvent.TSK_M)) {
 
 			angleZ -= 5;
 
 		}
-		else if(event.isKeyDown(KeyEvent.TSK_N)){
+		else if(event.isKeyDown(KeyEvent.TSK_N)) {
 
 			angleZ += 5;
 
@@ -214,12 +214,12 @@ public class LuvMotionReality extends ApplicationGL {
 		mx = event.getX();
 		my = event.getY();
 
-		if(event.onButtonDown(MouseButton.MOUSE_BUTTON_LEFT)){
+		if(event.isButtonDown(MouseButton.MOUSE_BUTTON_LEFT)) {
 			cameraGL.setZ(cameraGL.getZ()+0.1f);
 			click = true;
 		}
 
-		if(event.onButtonUp(MouseButton.MOUSE_BUTTON_LEFT)){
+		if(event.isButtonUp(MouseButton.MOUSE_BUTTON_LEFT)) {
 			cameraGL.setZ(cameraGL.getZ()-0.1f);
 			click = false;
 		}
@@ -257,7 +257,7 @@ public class LuvMotionReality extends ApplicationGL {
 
 	}
 
-	protected void drawSphere(GL2 gl){
+	protected void drawSphere(GL2 gl) {
 
 		final float radius = 1.378f;
 		final int slices = 16;
@@ -283,7 +283,7 @@ public class LuvMotionReality extends ApplicationGL {
 		gl.glPopMatrix();
 	}
 
-	protected void drawCube(GL2 gl){
+	protected void drawCube(GL2 gl) {
 
 		float x = 0;
 
@@ -333,7 +333,7 @@ public class LuvMotionReality extends ApplicationGL {
 	}
 
 	//Drawing Nehe Pyramid
-	protected void drawPyramid(GL2 gl){
+	protected void drawPyramid(GL2 gl) {
 
 		gl.glPushMatrix();
 		gl.glScaled(1.8, 1.8, 1.8);
