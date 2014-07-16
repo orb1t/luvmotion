@@ -6,15 +6,19 @@ import java.awt.image.BufferedImage;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 
+import br.com.abby.linear.Point3D;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.graphics.Graphic;
 import br.com.etyllica.linear.Point2D;
 import br.com.etyllica.motion.core.features.Component;
+import br.com.etyllica.motion.core.helper.RotationAxis;
 import br.com.etyllica.motion.filter.color.ColorStrategy;
 import br.com.etyllica.motion.filter.search.FloodFillSearch;
-import br.com.etyllica.motion.modifier.AugmentedMarkerModifier;
 import br.com.etyllica.motion.modifier.PositCoplanarModifier;
+import br.com.etyllica.motion.modifier.hull.AugmentedMarkerModifier;
+import br.com.etyllica.motion.modifier.hull.FastConvexHullModifier;
+import br.com.etyllica.motion.modifier.hull.HullModifier;
 
 public class PositProcessingGL extends LuvMotionReality {
 
@@ -23,7 +27,9 @@ public class PositProcessingGL extends LuvMotionReality {
 
 	protected ColorStrategy colorStrategy;
 
-	protected AugmentedMarkerModifier modifier;
+	protected HullModifier hullModifier;
+	
+	private RotationAxis axis;
 	
 	protected PositCoplanarModifier positModifier;
 
@@ -38,6 +44,8 @@ public class PositProcessingGL extends LuvMotionReality {
 	private int textHeight = 125;
 	
 	private boolean drawSphere = false;
+	
+	private Point3D axisMarker = new Point3D(0, 5, 0);
 
 	public PositProcessingGL(int w, int h) {
 		super(w, h);
@@ -58,8 +66,6 @@ public class PositProcessingGL extends LuvMotionReality {
 		colorStrategy = new ColorStrategy(markerColor);
 		
 		colorStrategy.setTolerance(0x30);
-
-		modifier = new AugmentedMarkerModifier();
 		
 		positModifier = new PositCoplanarModifier(width, height);
 		
@@ -71,7 +77,9 @@ public class PositProcessingGL extends LuvMotionReality {
 
 		cornerFilter.setPixelStrategy(colorStrategy);
 
-		cornerFilter.setComponentModifierStrategy(modifier);
+		hullModifier = new AugmentedMarkerModifier();
+		
+		cornerFilter.setComponentModifierStrategy(hullModifier);
 
 		feature = new Component(0, 0, w, h);
 
@@ -88,7 +96,9 @@ public class PositProcessingGL extends LuvMotionReality {
 		return GUIEvent.NONE;
 
 	}
-
+	
+	private Point3D point = new Point3D(0, 0, 0);
+	
 	public void display(GLAutoDrawable drawable) {
 		
 		GL2 gl = drawable.getGL().getGL2();
@@ -96,41 +106,47 @@ public class PositProcessingGL extends LuvMotionReality {
 		//gl.glPushMatrix();
 		//Draw Marker Scene
 		super.display(drawable);
-		
+				
 		//gl.glPopMatrix();
 				
 		if(feature.getPoints().size()>3) {
 
 			resetScene(gl);
+						
+			double angle = axis.getAngle();
+			double rx = axis.getRotationX();
+			double ry = axis.getRotationY();
+			double rz = axis.getRotationZ();
 			
-			double angle = positModifier.getAxis().getAngle();
-			double x = positModifier.getAxis().getAxisX();
-			double y = positModifier.getAxis().getAxisZ();
-			double z = positModifier.getAxis().getAxisY();
+			gl.glPushMatrix();
 			
-			gl.glRotated(angle, x, y, z);			
-			
-		}
+			gl.glRotated(angle, rx, ry, rz);
+						
+			if(!hide) {
 				
-		if(!hide) {
-
-			drawAxis(gl);
-			
-			//Flip Y Axis
-			//gl.glScalef(1.f, -1.f, 1.f);
-			
-			calculate(pipCamera);
-
-			if(drawSphere) {
-				drawSphere(gl);
-			}else{
-				//drawCube(gl);
-				drawPyramid(gl);
+				drawAxis(gl);
+				
+				//Flip Y Axis
+				//gl.glScalef(1.f, -1.f, 1.f);
+				
+				if(drawSphere) {
+					drawSphere(gl);
+				}else{
+					//drawCube(gl);
+					drawPyramid(gl);
+				}
 			}
-			
-		}
-
 		
+			point = transformPosition(gl, axisMarker);
+			
+			gl.glPopMatrix();
+						
+		}
+		
+		drawSphere(gl, 0.5, point.getX(), point.getZ(), point.getY());
+			
+		calculate(pipCamera);
+				
 	}
 	
 	private void resetScene(GL2 gl) {
@@ -151,7 +167,7 @@ public class PositProcessingGL extends LuvMotionReality {
 
 		gl.glColor3f(0, 1, 0);
 		gl.glVertex3f(0, 0, 0);
-		gl.glVertex3f(0, -axisSize, 0);
+		gl.glVertex3f(0, axisSize, 0);
 
 		gl.glColor3f(0, 0, 1);
 		gl.glVertex3f(0, 0, 0);
@@ -168,7 +184,7 @@ public class PositProcessingGL extends LuvMotionReality {
 
 		feature = cornerFilter.filterFirst(b, new Component(0, 0, b.getWidth(), b.getHeight()));
 		
-		positModifier.modifyComponent(feature);
+		axis = positModifier.modify(feature);
 		
 		loading = 65;
 		loadingPhrase = "Show Result";
@@ -219,17 +235,21 @@ public class PositProcessingGL extends LuvMotionReality {
 		drawBox(g, feature);
 
 		//g.drawString("Filter", 20, textHeight+100);
-		g.drawString("Filter(Posit/angle): "+positModifier.getAxis().getAngle(), 20, textHeight+100);
+		g.drawString("Filter(Posit/angle): "+axis.getAngle(), 20, textHeight+100);
 
 		g.drawString("Points = "+feature.getPoints().size(), 20, textHeight+125);
 
-		g.drawString("Angle = "+positModifier.getAxis().getAngle(), 20, textHeight+150);
+		g.drawString("Angle = "+axis.getAngle(), 20, textHeight+150);
 		
-		g.drawString("AxisX = "+positModifier.getAxis().getAxisX(), 20, textHeight+175);
+		g.drawString("AxisX = "+axis.getRotationX(), 20, textHeight+175);
 
-		g.drawString("AxisY = "+positModifier.getAxis().getAxisY(), 20, textHeight+200);
+		g.drawString("AxisY = "+axis.getRotationY(), 20, textHeight+200);
 		
-		g.drawString("AxisZ = "+positModifier.getAxis().getAxisZ(), 20, textHeight+225);
+		g.drawString("AxisZ = "+axis.getRotationZ(), 20, textHeight+225);
+		
+		g.drawString("X = "+axis.getX(), 20, textHeight+250);
+		g.drawString("Y = "+axis.getY(), 20, textHeight+275);
+		g.drawString("Z = "+axis.getZ(), 20, textHeight+300);
 		
 		Point2D a = feature.getPoints().get(0);
 		Point2D b = feature.getPoints().get(1);
@@ -242,17 +262,17 @@ public class PositProcessingGL extends LuvMotionReality {
 		Point2D bd = new Point2D((b.getX()+d.getX())/2, (b.getY()+d.getY())/2);
 		Point2D cd = new Point2D((c.getX()+d.getX())/2, (c.getY()+d.getY())/2);
 		
-		g.drawString("Dist(AB) = "+a.distance(b), 20, textHeight+250);
-		g.drawString("Dist(AC) = "+a.distance(c), 20, textHeight+275);
-		g.drawString("Dist(DB) = "+d.distance(b), 20, textHeight+300);
-		g.drawString("Dist(DC) = "+d.distance(c), 20, textHeight+325);
+		g.drawString("Dist(AB) = "+a.distance(b), 20, textHeight+350);
+		g.drawString("Dist(AC) = "+a.distance(c), 20, textHeight+375);
+		g.drawString("Dist(DB) = "+d.distance(b), 20, textHeight+400);
+		g.drawString("Dist(DC) = "+d.distance(c), 20, textHeight+425);
 		
 		/*g.drawString("Dist((AC)~(BD)) = "+ac.distance(bd), 20, textHeight+325);
 		g.drawString("Dist((AB)~(CD)) = "+ab.distance(cd), 20, textHeight+350);*/
 				
-		g.drawString("Dist((AC/AB)) = "+Double.toString(a.distance(c)/a.distance(b)), 20, textHeight+350);
-		g.drawString("Dist((BD/CD)) = "+Double.toString(b.distance(d)/c.distance(d)), 20, textHeight+375);
-		g.drawString("Dist((AC/AB)*(CD/BD)) = "+Double.toString((a.distance(c)/a.distance(b))*(d.distance(c)/b.distance(d))), 20, textHeight+400);
+		g.drawString("Dist((AC/AB)) = "+Double.toString(a.distance(c)/a.distance(b)), 20, textHeight+450);
+		g.drawString("Dist((BD/CD)) = "+Double.toString(b.distance(d)/c.distance(d)), 20, textHeight+475);
+		g.drawString("Dist((AC/AB)*(CD/BD)) = "+Double.toString((a.distance(c)/a.distance(b))*(d.distance(c)/b.distance(d))), 20, textHeight+500);
 		
 		//g.drawString("Lateral Distance = "+modifier.getLateralDistance(), 20, textHeight+400);
 	}
