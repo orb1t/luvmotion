@@ -48,6 +48,12 @@ public class LuvMotionReality extends ApplicationGL {
 	protected double angleY = 0;
 	
 	protected double angleZ = 0;
+	
+	protected double offsetX = 0;
+	
+	protected double offsetY = 0;
+	
+	protected double offsetZ = 0;
 
 	protected BufferedImage pipCamera;
 
@@ -173,11 +179,36 @@ public class LuvMotionReality extends ApplicationGL {
 	@Override
 	public GUIEvent updateKeyboard(KeyEvent event) {
 
+		if(event.isKeyDown(KeyEvent.TSK_D)) {
+			offsetX += 0.5;
+			
+		} else if(event.isKeyDown(KeyEvent.TSK_A)) {
+			
+			offsetX -= 0.5;
+		}
+		
+		if(event.isKeyDown(KeyEvent.TSK_W)) {
+			offsetY += 0.5;
+			
+		} else if(event.isKeyDown(KeyEvent.TSK_S)) {
+			
+			offsetY -= 0.5;
+		}
+		
+		if(event.isKeyDown(KeyEvent.TSK_Q)) {
+			offsetZ += 0.5;
+			
+		} else if(event.isKeyDown(KeyEvent.TSK_E)) {
+			
+			offsetZ -= 0.5;
+		}
+		
 		if(event.isKeyDown(KeyEvent.TSK_UP_ARROW)) {
 
 			angleX += 5;
 
 		}
+		
 		else if(event.isKeyDown(KeyEvent.TSK_DOWN_ARROW)) {
 
 			angleX -= 5;
@@ -238,6 +269,8 @@ public class LuvMotionReality extends ApplicationGL {
 		//Transform by Camera
 		updateCamera(gl, cameraGL);
 
+		gl.glTranslated(offsetX, offsetY, offsetZ);
+		
 		gl.glRotated(angleX, 1, 0, 0);
 		gl.glRotated(angleY, 0, 1, 0);
 		gl.glRotated(angleZ, 0, 0, 1);
@@ -260,6 +293,12 @@ public class LuvMotionReality extends ApplicationGL {
 	protected void drawSphere(GL2 gl) {
 
 		final float radius = 1.378f;
+
+		drawSphere(gl, radius, 0, radius, 0);
+	}
+	
+	protected void drawSphere(GL2 gl, double radius, double x, double y, double z) {
+
 		final int slices = 16;
 		final int stacks = 16;
 
@@ -268,7 +307,7 @@ public class LuvMotionReality extends ApplicationGL {
 		// Draw sphere (possible styles: FILL, LINE, POINT).
 		gl.glColor3f(0.3f, 0.5f, 1f);
 
-		gl.glTranslated(0, radius, 0);
+		gl.glTranslated(x, y, z);
 
 		GLUquadric earth = glu.gluNewQuadric();
 
