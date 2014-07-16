@@ -13,8 +13,8 @@ import br.com.etyllica.linear.Point2D;
 import br.com.etyllica.motion.core.features.Component;
 import br.com.etyllica.motion.filter.color.ColorStrategy;
 import br.com.etyllica.motion.filter.search.FloodFillSearch;
-import br.com.etyllica.motion.modifier.AugmentedMarkerModifier;
 import br.com.etyllica.motion.modifier.PositCoplanarModifier;
+import br.com.etyllica.motion.modifier.hull.AugmentedMarkerModifier;
 
 public class ImageProcessingGL extends LuvMotionReality {
 
@@ -182,11 +182,11 @@ public class ImageProcessingGL extends LuvMotionReality {
 
 		g.drawString("Angle = "+positModifier.getAxis().getAngle(), 20, textHeight+150);
 		
-		g.drawString("AxisX = "+positModifier.getAxis().getAxisX(), 20, textHeight+175);
+		g.drawString("AxisX = "+positModifier.getAxis().getRotationX(), 20, textHeight+175);
 
-		g.drawString("AxisY = "+positModifier.getAxis().getAxisY(), 20, textHeight+200);
+		g.drawString("AxisY = "+positModifier.getAxis().getRotationY(), 20, textHeight+200);
 		
-		g.drawString("AxisZ = "+positModifier.getAxis().getAxisZ(), 20, textHeight+225);
+		g.drawString("AxisZ = "+positModifier.getAxis().getRotationZ(), 20, textHeight+225);
 		
 		Point2D a = feature.getPoints().get(0);
 		Point2D b = feature.getPoints().get(1);
