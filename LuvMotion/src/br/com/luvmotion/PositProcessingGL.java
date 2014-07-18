@@ -6,11 +6,11 @@ import java.awt.image.BufferedImage;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 
-import br.com.abby.linear.Point3D;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.graphics.Graphic;
 import br.com.etyllica.linear.Point2D;
+import br.com.etyllica.linear.Point3D;
 import br.com.etyllica.motion.core.features.Component;
 import br.com.etyllica.motion.core.helper.RotationAxis;
 import br.com.etyllica.motion.filter.color.ColorStrategy;
@@ -137,7 +137,7 @@ public class PositProcessingGL extends LuvMotionReality {
 				}
 			}
 		
-			point = transformPosition(gl, axisMarker);
+			point = axis.transformPoint(axisMarker);
 			
 			gl.glPopMatrix();
 						
