@@ -81,6 +81,16 @@ public class LuvMotionReality extends ApplicationGL {
 
 		cameraGL = new CameraGL(0,15,1);
 
+		BufferedImage image = generateMarkerImage();
+		
+		pipCamera = image;
+		
+		marker = TextureLoader.getInstance().loadTexture(image);
+
+	}
+	
+	private BufferedImage generateMarkerImage() {
+		
 		BufferedImage image = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = image.createGraphics();
 
@@ -98,9 +108,9 @@ public class LuvMotionReality extends ApplicationGL {
 
 		g.setStroke(new BasicStroke(strokeSize));
 		g.drawRect(strokeSize, strokeSize, 200-strokeSize*2, 200-strokeSize*2);
-
-		marker = TextureLoader.getInstance().loadTexture(image);
-
+		
+		return image;
+		
 	}
 
 	protected void drawFloor(GL2 gl) {

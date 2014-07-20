@@ -15,10 +15,12 @@ import br.com.etyllica.motion.core.features.Component;
 import br.com.etyllica.motion.core.helper.RotationAxis;
 import br.com.etyllica.motion.filter.color.ColorStrategy;
 import br.com.etyllica.motion.filter.search.FloodFillSearch;
+import br.com.etyllica.motion.filter.validation.MaxComponentDimension;
 import br.com.etyllica.motion.modifier.PositCoplanarModifier;
 import br.com.etyllica.motion.modifier.hull.AugmentedMarkerModifier;
 import br.com.etyllica.motion.modifier.hull.FastConvexHullModifier;
 import br.com.etyllica.motion.modifier.hull.HullModifier;
+import br.com.etyllica.motion.modifier.hull.RectangularOGRModifier;
 
 public class PositProcessingGL extends LuvMotionReality {
 
@@ -45,7 +47,7 @@ public class PositProcessingGL extends LuvMotionReality {
 	
 	private boolean drawSphere = false;
 	
-	private Point3D axisMarker = new Point3D(0, 5, 0);
+	private Point3D axisMarker = new Point3D(0, -5, 0);
 
 	public PositProcessingGL(int w, int h) {
 		super(w, h);
@@ -70,14 +72,16 @@ public class PositProcessingGL extends LuvMotionReality {
 		positModifier = new PositCoplanarModifier(width, height);
 		
 		cornerFilter = new FloodFillSearch(width, height);
-
+		cornerFilter.addValidation(new MaxComponentDimension(w/2));
+		
 		cornerFilter.setBorder(30);
 		
 		cornerFilter.setStep(1);
 
 		cornerFilter.setPixelStrategy(colorStrategy);
 
-		hullModifier = new AugmentedMarkerModifier();
+		//hullModifier = new AugmentedMarkerModifier();
+		hullModifier = new RectangularOGRModifier();
 		
 		cornerFilter.setComponentModifierStrategy(hullModifier);
 
@@ -118,7 +122,14 @@ public class PositProcessingGL extends LuvMotionReality {
 			double ry = axis.getRotationY();
 			double rz = axis.getRotationZ();
 			
+			//Changes by center distance
+			double translationFactor = 5;
+			double tx = axis.getX()*translationFactor;
+			double tz = -axis.getZ()*translationFactor;
+			
 			gl.glPushMatrix();
+			
+			gl.glTranslated(tx, 0 , tz);
 			
 			gl.glRotated(angle, rx, ry, rz);
 						
@@ -140,11 +151,13 @@ public class PositProcessingGL extends LuvMotionReality {
 			point = axis.transformPoint(axisMarker);
 			
 			gl.glPopMatrix();
+			
+			gl.glTranslated(tx, 0 , tz);
+			
+			drawSphere(gl, 0.5, point.getX(), point.getZ(), point.getY());
 						
 		}
-		
-		drawSphere(gl, 0.5, point.getX(), point.getZ(), point.getY());
-			
+					
 		calculate(pipCamera);
 				
 	}
