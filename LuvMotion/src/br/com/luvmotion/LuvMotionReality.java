@@ -46,13 +46,13 @@ public class LuvMotionReality extends ApplicationGL {
 	protected double angleX = 0;
 
 	protected double angleY = 0;
-	
+
 	protected double angleZ = 0;
-	
+
 	protected double offsetX = 0;
-	
+
 	protected double offsetY = 0;
-	
+
 	protected double offsetZ = 0;
 
 	protected BufferedImage pipCamera;
@@ -79,18 +79,18 @@ public class LuvMotionReality extends ApplicationGL {
 	@Override
 	public void load() {
 
-		cameraGL = new CameraGL(0,15,1);
+		cameraGL = new CameraGL(0, 5, 0.0001);
 
 		BufferedImage image = generateMarkerImage();
-		
+
 		pipCamera = image;
-		
+
 		marker = TextureLoader.getInstance().loadTexture(image);
 
 	}
-	
+
 	private BufferedImage generateMarkerImage() {
-		
+
 		BufferedImage image = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = image.createGraphics();
 
@@ -108,9 +108,9 @@ public class LuvMotionReality extends ApplicationGL {
 
 		g.setStroke(new BasicStroke(strokeSize));
 		g.drawRect(strokeSize, strokeSize, 200-strokeSize*2, 200-strokeSize*2);
-		
+
 		return image;
-		
+
 	}
 
 	protected void drawFloor(GL2 gl) {
@@ -126,16 +126,40 @@ public class LuvMotionReality extends ApplicationGL {
 
 	private void drawGrid(GL2 gl, double x, double y) {
 
-		double tileSize = 5;
+		double tileSize = 1;
 
 		marker.enable(gl);
 		marker.bind(gl);
 
-		drawTile(gl, -.5, -.5, tileSize);
+		drawMarker(gl, tileSize);		
 
 		marker.disable(gl);
 	}
 
+	private void drawMarker(GL2 gl, double tileSize) {
+		
+		gl.glBegin(GL2.GL_QUADS);
+
+		//(0,0)
+		gl.glTexCoord2d(0, 0);
+		gl.glVertex3d(-tileSize/2, 0, -tileSize/2);
+
+		//(1,0)
+		gl.glTexCoord2d(1, 0);
+		gl.glVertex3d(+tileSize/2, 0, -tileSize/2);
+
+		//(1,1)
+		gl.glTexCoord2d(1, 1);
+		gl.glVertex3d(+tileSize/2, 0, +tileSize/2);
+
+		//(0,1)
+		gl.glTexCoord2d(0, 1);
+		gl.glVertex3d(-tileSize/2, 0, +tileSize/2);
+
+		gl.glEnd();
+		
+	}
+	
 	private void drawTile(GL2 gl, double x, double y, double tileSize) {
 
 		gl.glBegin(GL2.GL_QUADS);
@@ -186,39 +210,42 @@ public class LuvMotionReality extends ApplicationGL {
 
 	}	
 
+	private double offset = 0.5; 
+
 	@Override
 	public GUIEvent updateKeyboard(KeyEvent event) {
 
 		if(event.isKeyDown(KeyEvent.TSK_D)) {
-			offsetX += 0.5;
-			
+			offsetX += offset;
+
 		} else if(event.isKeyDown(KeyEvent.TSK_A)) {
-			
-			offsetX -= 0.5;
+
+			offsetX -= offset;
 		}
-		
+
 		if(event.isKeyDown(KeyEvent.TSK_W)) {
-			offsetY += 0.5;
-			
+			offsetY += offset;
+
 		} else if(event.isKeyDown(KeyEvent.TSK_S)) {
-			
-			offsetY -= 0.5;
+
+			offsetY -= offset;
 		}
-		
+
 		if(event.isKeyDown(KeyEvent.TSK_Q)) {
-			offsetZ += 0.5;
-			
+			offsetZ += offset;
+
 		} else if(event.isKeyDown(KeyEvent.TSK_E)) {
-			
-			offsetZ -= 0.5;
+
+			offsetZ -= offset;
 		}
-		
+
+
 		if(event.isKeyDown(KeyEvent.TSK_UP_ARROW)) {
 
 			angleX += 5;
 
 		}
-		
+
 		else if(event.isKeyDown(KeyEvent.TSK_DOWN_ARROW)) {
 
 			angleX -= 5;
@@ -235,7 +262,7 @@ public class LuvMotionReality extends ApplicationGL {
 			angleY -= 5;
 
 		}
-		
+
 		if(event.isKeyDown(KeyEvent.TSK_M)) {
 
 			angleZ -= 5;
@@ -280,7 +307,7 @@ public class LuvMotionReality extends ApplicationGL {
 		updateCamera(gl, cameraGL);
 
 		gl.glTranslated(offsetX, offsetY, offsetZ);
-		
+
 		gl.glRotated(angleX, 1, 0, 0);
 		gl.glRotated(angleY, 0, 1, 0);
 		gl.glRotated(angleZ, 0, 0, 1);
@@ -306,7 +333,7 @@ public class LuvMotionReality extends ApplicationGL {
 
 		drawSphere(gl, radius, 0, radius, 0);
 	}
-	
+
 	protected void drawSphere(GL2 gl, double radius, double x, double y, double z) {
 
 		final int slices = 16;
@@ -344,7 +371,7 @@ public class LuvMotionReality extends ApplicationGL {
 
 		gl.glPushMatrix();
 
-		gl.glTranslated(0, 0.5, 0);
+		gl.glTranslated(0, 1, 0);
 
 		gl.glTranslated(x, y, z);
 
@@ -384,38 +411,41 @@ public class LuvMotionReality extends ApplicationGL {
 	//Drawing Nehe Pyramid
 	protected void drawPyramid(GL2 gl) {
 
+		float size = 1.0f;
+		
 		gl.glPushMatrix();
-		gl.glScaled(1.8, 1.8, 1.8);
-		
-		gl.glTranslated(0, 1, 0);
-		
+		//gl.glScaled(1.8, 1.8, 1.8);
+		//gl.glScaled(1, 1, 1);
+
+		//gl.glTranslated(0, 1, 0);
+
 		gl.glBegin(GL.GL_TRIANGLES);        // Drawing Using Triangles
-		gl.glColor3f(1.0f, 0.0f, 0.0f);     // Red
-		gl.glVertex3f(0.0f, 1.0f, 0.0f);    // Top Of Triangle (Front)
-		gl.glColor3f(0.0f, 1.0f, 0.0f);     // Green
-		gl.glVertex3f(-1.0f, -1.0f, 1.0f);  // Left Of Triangle (Front)
-		gl.glColor3f(0.0f, 0.0f, 1.0f);     // Blue
-		gl.glVertex3f(1.0f, -1.0f, 1.0f);   // Right Of Triangle (Front)
-		gl.glColor3f(1.0f, 0.0f, 0.0f);     // Red
-		gl.glVertex3f(0.0f, 1.0f, 0.0f);    // Top Of Triangle (Right)
-		gl.glColor3f(0.0f, 0.0f, 1.0f);     // Blue
-		gl.glVertex3f(1.0f, -1.0f, 1.0f);   // Left Of Triangle (Right)
-		gl.glColor3f(0.0f, 1.0f, 0.0f);     // Green
-		gl.glVertex3f(1.0f, -1.0f, -1.0f);  // Right Of Triangle (Right)
-		gl.glColor3f(1.0f, 0.0f, 0.0f);     // Red
-		gl.glVertex3f(0.0f, 1.0f, 0.0f);    // Top Of Triangle (Back)
-		gl.glColor3f(0.0f, 1.0f, 0.0f);     // Green
-		gl.glVertex3f(1.0f, -1.0f, -1.0f);  // Left Of Triangle (Back)
-		gl.glColor3f(0.0f, 0.0f, 1.0f);     // Blue
-		gl.glVertex3f(-1.0f, -1.0f, -1.0f); // Right Of Triangle (Back)
-		gl.glColor3f(1.0f, 0.0f, 0.0f);     // Red
-		gl.glVertex3f(0.0f, 1.0f, 0.0f);    // Top Of Triangle (Left)
-		gl.glColor3f(0.0f, 0.0f, 1.0f);     // Blue
-		gl.glVertex3f(-1.0f, -1.0f, -1.0f); // Left Of Triangle (Left)
-		gl.glColor3f(0.0f, 1.0f, 0.0f);     // Green
-		gl.glVertex3f(-1.0f, -1.0f, 1.0f);  // Right Of Triangle (Left)
+		gl.glColor3f(size, 0.0f, 0.0f);     // Red
+		gl.glVertex3f(0.0f, size, 0.0f);    // Top Of Triangle (Front)
+		gl.glColor3f(0.0f, size, 0.0f);     // Green
+		gl.glVertex3f(-size, -size, size);  // Left Of Triangle (Front)
+		gl.glColor3f(0.0f, 0.0f, size);     // Blue
+		gl.glVertex3f(size, -size, size);   // Right Of Triangle (Front)
+		gl.glColor3f(size, 0.0f, 0.0f);     // Red
+		gl.glVertex3f(0.0f, size, 0.0f);    // Top Of Triangle (Right)
+		gl.glColor3f(0.0f, 0.0f, size);     // Blue
+		gl.glVertex3f(size, -size, size);   // Left Of Triangle (Right)
+		gl.glColor3f(0.0f, size, 0.0f);     // Green
+		gl.glVertex3f(size, -size, -size);  // Right Of Triangle (Right)
+		gl.glColor3f(size, 0.0f, 0.0f);     // Red
+		gl.glVertex3f(0.0f, size, 0.0f);    // Top Of Triangle (Back)
+		gl.glColor3f(0.0f, size, 0.0f);     // Green
+		gl.glVertex3f(size, -size, -size);  // Left Of Triangle (Back)
+		gl.glColor3f(0.0f, 0.0f, size);     // Blue
+		gl.glVertex3f(-size, -size, -size); // Right Of Triangle (Back)
+		gl.glColor3f(size, 0.0f, 0.0f);     // Red
+		gl.glVertex3f(0.0f, size, 0.0f);    // Top Of Triangle (Left)
+		gl.glColor3f(0.0f, 0.0f, size);     // Blue
+		gl.glVertex3f(-size, -size, -size); // Left Of Triangle (Left)
+		gl.glColor3f(0.0f, size, 0.0f);     // Green
+		gl.glVertex3f(-size, -size, size);  // Right Of Triangle (Left)
 		gl.glEnd();                         // Finished Drawing The Triangle
-		
+
 		gl.glPopMatrix();
 
 	}

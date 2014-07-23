@@ -16,6 +16,9 @@ import br.com.etyllica.motion.core.helper.RotationAxis;
 import br.com.etyllica.motion.filter.color.ColorStrategy;
 import br.com.etyllica.motion.filter.search.FloodFillSearch;
 import br.com.etyllica.motion.filter.validation.MaxComponentDimension;
+import br.com.etyllica.motion.math.interpolation.Interpolator;
+import br.com.etyllica.motion.math.interpolation.LagrangeInterpolator;
+import br.com.etyllica.motion.math.interpolation.QuadraticInterpolator;
 import br.com.etyllica.motion.modifier.PositCoplanarModifier;
 import br.com.etyllica.motion.modifier.hull.AugmentedMarkerModifier;
 import br.com.etyllica.motion.modifier.hull.FastConvexHullModifier;
@@ -47,8 +50,6 @@ public class PositProcessingGL extends LuvMotionReality {
 	
 	private boolean drawSphere = false;
 	
-	private Point3D axisMarker = new Point3D(0, -5, 0);
-
 	public PositProcessingGL(int w, int h) {
 		super(w, h);
 	}
@@ -72,9 +73,9 @@ public class PositProcessingGL extends LuvMotionReality {
 		positModifier = new PositCoplanarModifier(width, height);
 		
 		cornerFilter = new FloodFillSearch(width, height);
-		cornerFilter.addValidation(new MaxComponentDimension(w/2));
+		cornerFilter.addValidation(new MaxComponentDimension(w));
 		
-		cornerFilter.setBorder(30);
+		cornerFilter.setBorder(10);
 		
 		cornerFilter.setStep(1);
 
@@ -122,16 +123,13 @@ public class PositProcessingGL extends LuvMotionReality {
 			double ry = axis.getRotationY();
 			double rz = axis.getRotationZ();
 			
-			//Changes by center distance
-			double translationFactor = 5;
-			double tx = axis.getX()*translationFactor;
-			double tz = -axis.getZ()*translationFactor;
-			
 			gl.glPushMatrix();
-			
-			gl.glTranslated(tx, 0 , tz);
-			
+				
+			gl.glTranslated(axis.getX(), 0, -axis.getZ());
 			gl.glRotated(angle, rx, ry, rz);
+			
+			//
+			//gl.glTranslated(axis.getX(), axis.getY()-12, -axis.getZ());
 						
 			if(!hide) {
 				
@@ -146,21 +144,41 @@ public class PositProcessingGL extends LuvMotionReality {
 					//drawCube(gl);
 					drawPyramid(gl);
 				}
+				
 			}
-		
-			point = axis.transformPoint(axisMarker);
-			
+					
 			gl.glPopMatrix();
+						
+			double xFactor = 4.6;
 			
-			gl.glTranslated(tx, 0 , tz);
+			//double zFactor = suggestZFactor(-axis.getZ());
+			double zFactor = xFactor;
 			
-			drawSphere(gl, 0.5, point.getX(), point.getZ(), point.getY());
+			//Point3D axisMarker = new Point3D(axis.getX(), -axis.getZ(), axis.getY());
+			Point3D axisMarker = new Point3D(axis.getX()*xFactor, axis.getY()-4, -axis.getZ()*zFactor);
+						
+			point = axis.transformPoint(axisMarker);
+			//point.setY(suggest(axis.getY()));
+			//point.setY(0);
+						
+			//drawSphere(gl, 0.5, point.getX(), point.getY(), point.getZ());
 						
 		}
 					
 		calculate(pipCamera);
 				
 	}
+	
+	private double suggestZFactor(double axis) {
+		
+		QuadraticInterpolator interpolator = new QuadraticInterpolator();
+		interpolator.addPoint(-6, -5.0);
+		interpolator.addPoint(0, 0);		
+		interpolator.addPoint(5.5, -4.07);
+		
+		return interpolator.interpolate(axis);
+	}
+	
 	
 	private void resetScene(GL2 gl) {
 		gl.glLoadIdentity();
@@ -233,6 +251,8 @@ public class PositProcessingGL extends LuvMotionReality {
 				if(feature.getPoints().size()>3) {
 
 					drawFilterData(g);
+					
+					drawRealData(g);
 
 				}
 			}
@@ -263,7 +283,7 @@ public class PositProcessingGL extends LuvMotionReality {
 		g.drawString("X = "+axis.getX(), 20, textHeight+250);
 		g.drawString("Y = "+axis.getY(), 20, textHeight+275);
 		g.drawString("Z = "+axis.getZ(), 20, textHeight+300);
-		
+				
 		Point2D a = feature.getPoints().get(0);
 		Point2D b = feature.getPoints().get(1);
 		Point2D c = feature.getPoints().get(2);
@@ -288,6 +308,38 @@ public class PositProcessingGL extends LuvMotionReality {
 		g.drawString("Dist((AC/AB)*(CD/BD)) = "+Double.toString((a.distance(c)/a.distance(b))*(d.distance(c)/b.distance(d))), 20, textHeight+500);
 		
 		//g.drawString("Lateral Distance = "+modifier.getLateralDistance(), 20, textHeight+400);
+	}
+	
+	private void drawRealData(Graphic g) {
+		
+		g.drawString("X = "+offsetX, 720, textHeight+250);
+		g.drawString("Y = "+offsetY, 720, textHeight+275);
+		g.drawString("Z = "+offsetZ, 720, textHeight+300);
+		
+		double xFactor = offsetX/axis.getX();
+		double zFactor = offsetZ/axis.getZ();
+		
+		g.drawString("FX = "+xFactor, 720, textHeight+175);
+		g.drawString("FZ = "+zFactor, 720, textHeight+200);
+		
+		//g.drawString("SY = "+suggest(axis.getY()), 790, textHeight+275);
+		g.drawString("PX = "+point.getX(), 800, textHeight+250);
+		g.drawString("PY = "+point.getY(), 800, textHeight+275);
+		g.drawString("PZ = "+point.getZ(), 800, textHeight+300);
+		
+	}
+	
+	QuadraticInterpolator interpolator = new QuadraticInterpolator();
+	
+	private double suggest(double x) {
+	
+		interpolator.reset();
+		
+		interpolator.addPoint(2.35, 5);
+		interpolator.addPoint(4.87, 10);
+		interpolator.addPoint(7.31, 15);
+		
+		return interpolator.interpolate(x);	
 	}
 
 	private void drawBox(Graphic g, Component box) {
