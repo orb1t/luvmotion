@@ -411,7 +411,7 @@ public class LuvMotionReality extends ApplicationGL {
 	//Drawing Nehe Pyramid
 	protected void drawPyramid(GL2 gl) {
 
-		float size = 1.0f;
+		float size = 1.0f/2;
 		
 		gl.glPushMatrix();
 		//gl.glScaled(1.8, 1.8, 1.8);
@@ -452,7 +452,7 @@ public class LuvMotionReality extends ApplicationGL {
 
 	private void drawSquare(GL2 gl) {
 
-		float size = 1;
+		float size = 1.0f/2;
 
 		gl.glTranslatef(0,0,size);
 
