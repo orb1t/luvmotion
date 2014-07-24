@@ -58,6 +58,8 @@ public class LuvMotionReality extends ApplicationGL {
 	protected BufferedImage pipCamera;
 
 	protected Color markerColor = Color.BLACK;
+	
+	private double markerY = -4;
 
 	public LuvMotionReality(int w, int h) {
 		super(w, h);
@@ -79,7 +81,7 @@ public class LuvMotionReality extends ApplicationGL {
 	@Override
 	public void load() {
 
-		cameraGL = new CameraGL(0, 5, 0.0001);
+		cameraGL = new CameraGL(0, 0.5, 0.0001);
 
 		BufferedImage image = generateMarkerImage();
 
@@ -120,41 +122,35 @@ public class LuvMotionReality extends ApplicationGL {
 		gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-		drawGrid(gl,200,120);		
-
-	}
-
-	private void drawGrid(GL2 gl, double x, double y) {
-
-		double tileSize = 1;
+		double tileSize = 1f;
 
 		marker.enable(gl);
 		marker.bind(gl);
 
-		drawMarker(gl, tileSize);		
+		drawMarker(gl, 0, tileSize);
 
 		marker.disable(gl);
 	}
 
-	private void drawMarker(GL2 gl, double tileSize) {
+	private void drawMarker(GL2 gl, double y, double tileSize) {
 		
 		gl.glBegin(GL2.GL_QUADS);
 
 		//(0,0)
 		gl.glTexCoord2d(0, 0);
-		gl.glVertex3d(-tileSize/2, 0, -tileSize/2);
+		gl.glVertex3d(-tileSize/2, y, -tileSize/2);
 
 		//(1,0)
 		gl.glTexCoord2d(1, 0);
-		gl.glVertex3d(+tileSize/2, 0, -tileSize/2);
+		gl.glVertex3d(+tileSize/2, y, -tileSize/2);
 
 		//(1,1)
 		gl.glTexCoord2d(1, 1);
-		gl.glVertex3d(+tileSize/2, 0, +tileSize/2);
+		gl.glVertex3d(+tileSize/2, y, +tileSize/2);
 
 		//(0,1)
 		gl.glTexCoord2d(0, 1);
-		gl.glVertex3d(-tileSize/2, 0, +tileSize/2);
+		gl.glVertex3d(-tileSize/2, y, +tileSize/2);
 
 		gl.glEnd();
 		
@@ -202,7 +198,7 @@ public class LuvMotionReality extends ApplicationGL {
 		float aspect = (float)width / (float)height; 
 
 		//gl.glOrtho(left*aspect, right*aspect, bottom, top, 0.1, 500);
-		glu.gluPerspective(60,aspect,1,100);
+		glu.gluPerspective(40, aspect, 1, 100);
 
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 
@@ -302,19 +298,33 @@ public class LuvMotionReality extends ApplicationGL {
 
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 		gl.glClearColor(1f, 1f, 1f, 1);
+		/*gl.glEnable(GL.GL_CULL_FACE);
+		gl.glEnable(GL.GL_DEPTH_TEST);
+		gl.glDepthFunc(GL.GL_LESS);
+		gl.glDepthMask(true);*/
+		
 
 		//Transform by Camera
 		updateCamera(gl, cameraGL);
 
+		//
+		
+		gl.glPushMatrix();
+		
+		gl.glTranslated(0, markerY, 0);
+		
 		gl.glTranslated(offsetX, offsetY, offsetZ);
-
+		
 		gl.glRotated(angleX, 1, 0, 0);
 		gl.glRotated(angleY, 0, 1, 0);
 		gl.glRotated(angleZ, 0, 0, 1);
+		
+		drawFloor(gl);
+		
+		gl.glPopMatrix();
 
 		//Draw Scene
 
-		drawFloor(gl);
 
 		//gl.glFlush();
 
@@ -361,19 +371,11 @@ public class LuvMotionReality extends ApplicationGL {
 
 	protected void drawCube(GL2 gl) {
 
-		float x = 0;
-
-		float y = 0;
-
-		float z = 0;
-
 		gl.glColor3f(0.3f, 0.5f, 1f);
 
 		gl.glPushMatrix();
 
-		gl.glTranslated(0, 1, 0);
-
-		gl.glTranslated(x, y, z);
+		gl.glTranslated(0, 0.5, 0);
 
 		gl.glPushMatrix();
 		drawSquare(gl);        // front face is red

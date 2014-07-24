@@ -125,7 +125,7 @@ public class PositProcessingGL extends LuvMotionReality {
 			
 			gl.glPushMatrix();
 				
-			gl.glTranslated(axis.getX(), 0, -axis.getZ());
+			gl.glTranslated(axis.getX(), -axis.getY(), -axis.getZ());
 			gl.glRotated(angle, rx, ry, rz);
 			
 			//
@@ -141,8 +141,8 @@ public class PositProcessingGL extends LuvMotionReality {
 				if(drawSphere) {
 					drawSphere(gl);
 				}else{
-					//drawCube(gl);
-					drawPyramid(gl);
+					drawCube(gl);
+					//drawPyramid(gl);
 				}
 				
 			}
