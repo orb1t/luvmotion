@@ -1,8 +1,9 @@
-package br.com.luvmotion;
+package br.com.luvmotion.ar;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
+import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 
@@ -58,7 +59,7 @@ public class PositProcessingGL extends LuvMotionReality {
 	public void load() {
 		super.load();
 
-		loadingPhrase = "Configuring Filter";
+		loadingInfo = "Configuring Filter";
 
 		int width = w;
 
@@ -111,6 +112,10 @@ public class PositProcessingGL extends LuvMotionReality {
 		//gl.glPushMatrix();
 		//Draw Marker Scene
 		super.display(drawable);
+		
+		//Erase Marker
+		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
+		gl.glClearColor(1f, 1f, 1f, 1);
 				
 		//gl.glPopMatrix();
 				
@@ -124,7 +129,7 @@ public class PositProcessingGL extends LuvMotionReality {
 			double rz = axis.getRotationZ();
 			
 			gl.glPushMatrix();
-				
+
 			gl.glTranslated(axis.getX(), -axis.getY(), -axis.getZ());
 			gl.glRotated(angle, rx, ry, rz);
 			
@@ -155,13 +160,11 @@ public class PositProcessingGL extends LuvMotionReality {
 			double zFactor = xFactor;
 			
 			//Point3D axisMarker = new Point3D(axis.getX(), -axis.getZ(), axis.getY());
-			Point3D axisMarker = new Point3D(axis.getX()*xFactor, axis.getY()-4, -axis.getZ()*zFactor);
+			Point3D axisMarker = new Point3D(axis.getX(), -axis.getY(), -axis.getZ());
 						
 			point = axis.transformPoint(axisMarker);
-			//point.setY(suggest(axis.getY()));
-			//point.setY(0);
 						
-			//drawSphere(gl, 0.5, point.getX(), point.getY(), point.getZ());
+			drawSphere(gl, 0.5, point.getX(), point.getY(), point.getZ());
 						
 		}
 					
@@ -211,17 +214,17 @@ public class PositProcessingGL extends LuvMotionReality {
 
 		loading = 60;
 
-		loadingPhrase = "Start Filter";
+		loadingInfo = "Start Filter";
 
 		feature = cornerFilter.filterFirst(b, new Component(0, 0, b.getWidth(), b.getHeight()));
 		
 		axis = positModifier.modify(feature);
 		
 		loading = 65;
-		loadingPhrase = "Show Result";
+		loadingInfo = "Show Result";
 
 		loading = 70;
-		loadingPhrase = "Show Angle";
+		loadingInfo = "Show Angle";
 	}
 
 	@Override
@@ -312,12 +315,12 @@ public class PositProcessingGL extends LuvMotionReality {
 	
 	private void drawRealData(Graphic g) {
 		
-		g.drawString("X = "+offsetX, 720, textHeight+250);
-		g.drawString("Y = "+offsetY, 720, textHeight+275);
-		g.drawString("Z = "+offsetZ, 720, textHeight+300);
+		g.drawString("X = "+scene.offsetX, 720, textHeight+250);
+		g.drawString("Y = "+scene.offsetY, 720, textHeight+275);
+		g.drawString("Z = "+scene.offsetZ, 720, textHeight+300);
 		
-		double xFactor = offsetX/axis.getX();
-		double zFactor = offsetZ/axis.getZ();
+		double xFactor = scene.offsetX/axis.getX();
+		double zFactor = scene.offsetZ/axis.getZ();
 		
 		g.drawString("FX = "+xFactor, 720, textHeight+175);
 		g.drawString("FZ = "+zFactor, 720, textHeight+200);
@@ -405,9 +408,9 @@ public class PositProcessingGL extends LuvMotionReality {
 
 		g.drawShadow(20,textHeight+20, "Scene",Color.BLACK);
 
-		g.drawShadow(20,textHeight+40, "AngleX: "+(angleX),Color.BLACK);
+		g.drawShadow(20,textHeight+40, "AngleX: "+(scene.angleX),Color.BLACK);
 
-		g.drawShadow(20,textHeight+60, "AngleY: "+(angleY),Color.BLACK);
+		g.drawShadow(20,textHeight+60, "AngleY: "+(scene.angleY),Color.BLACK);
 	}
 
 }

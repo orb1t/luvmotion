@@ -1,4 +1,4 @@
-package br.com.luvmotion.ar;
+package br.com.luvmotion.motion;
 
 import static javax.media.opengl.GL.GL_LINEAR;
 import static javax.media.opengl.GL.GL_TEXTURE_2D;
@@ -21,6 +21,7 @@ import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.event.PointerEvent;
 import br.com.etyllica.core.graphics.Graphic;
+import br.com.etyllica.core.graphics.SVGColor;
 import br.com.etyllica.core.input.mouse.MouseButton;
 import br.com.luvia.loader.TextureLoader;
 import br.com.luvmotion.LuvMotionApplication;
@@ -29,7 +30,7 @@ import br.com.luvmotion.model.RealityScene;
 import com.jogamp.opengl.util.awt.Screenshot;
 import com.jogamp.opengl.util.texture.Texture;
 
-public class LuvMotionReality extends LuvMotionApplication {
+public class LightSphere extends LuvMotionApplication {
 
 	//Scene Stuff
 	private Texture marker;
@@ -47,10 +48,11 @@ public class LuvMotionReality extends LuvMotionApplication {
 	protected BufferedImage pipCamera;
 
 	protected Color markerColor = Color.BLACK;
+	protected Color contentColor = SVGColor.DARK_SALMON;
 	
 	private double markerY = -4;
 
-	public LuvMotionReality(int w, int h) {
+	public LightSphere(int w, int h) {
 		super(w, h);
 	}
 
@@ -90,7 +92,7 @@ public class LuvMotionReality extends LuvMotionApplication {
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, 200, 200);
 
-		g.setColor(Color.BLUE);
+		g.setColor(contentColor);
 		g.fillOval(50, 50, 100, 100);
 
 		g.setColor(markerColor);
@@ -123,6 +125,8 @@ public class LuvMotionReality extends LuvMotionApplication {
 
 	private void drawMarker(GL2 gl, double y, double tileSize) {
 		
+		this.drawSphere(gl);
+		
 		gl.glBegin(GL2.GL_QUADS);
 
 		//(0,0)
@@ -144,8 +148,7 @@ public class LuvMotionReality extends LuvMotionApplication {
 		gl.glEnd();
 		
 	}
-	
-	
+
 	@Override
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
 
@@ -160,7 +163,7 @@ public class LuvMotionReality extends LuvMotionApplication {
 		float aspect = (float)width / (float)height; 
 
 		//gl.glOrtho(left*aspect, right*aspect, bottom, top, 0.1, 500);
-		glu.gluPerspective(40, aspect, 1, 100);		
+		glu.gluPerspective(40, aspect, 1, 100);
 
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 
@@ -274,7 +277,11 @@ public class LuvMotionReality extends LuvMotionApplication {
 		
 		gl.glTranslated(0, markerY, 0);
 		
-		scene.updateScene(gl);		
+		gl.glTranslated(scene.offsetX, scene.offsetY, scene.offsetZ);
+		
+		gl.glRotated(scene.angleX, 1, 0, 0);
+		gl.glRotated(scene.angleY, 0, 1, 0);
+		gl.glRotated(scene.angleZ, 0, 0, 1);
 		
 		drawFloor(gl);
 		

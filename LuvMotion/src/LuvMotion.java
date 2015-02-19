@@ -1,6 +1,9 @@
 import br.com.luvia.Luvia;
 import br.com.luvia.core.ApplicationGL;
-import br.com.luvmotion.PositProcessingGL;
+import br.com.luvmotion.ar.LuvMotionReality;
+import br.com.luvmotion.ar.PositExample;
+import br.com.luvmotion.ar.PositProcessingGL;
+import br.com.luvmotion.motion.LightSphere;
 
 
 public class LuvMotion extends Luvia {
@@ -13,19 +16,22 @@ public class LuvMotion extends Luvia {
 	public static void main(String[] args) {
 
 		LuvMotion luvmotion = new LuvMotion();
-				
-		luvmotion.init();
+						
+		luvmotion.init();		
 
 	}
 	
 	@Override
 	public ApplicationGL startApplication() {
 		
+		//Augmented Reality Examples
 		//return new LuvMotionReality(w, h);
-		
 		//return new ImageProcessingGL(w, h);
-		
-		return new PositProcessingGL(w, h);
+		//return new PositProcessingGL(w, h);
+		//return new PositExample(w, h);
+
+		//Motion Examples
+		return new LightSphere(w, h);
 		
 	}
 

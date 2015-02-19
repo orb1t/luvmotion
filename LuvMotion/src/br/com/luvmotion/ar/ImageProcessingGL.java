@@ -1,4 +1,4 @@
-package br.com.luvmotion;
+package br.com.luvmotion.ar;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -47,7 +47,7 @@ public class ImageProcessingGL extends LuvMotionReality {
 	public void load(){
 		super.load();
 
-		loadingPhrase = "Configuring Filter";
+		loadingInfo = "Configuring Filter";
 
 		int width = w;
 
@@ -122,17 +122,17 @@ public class ImageProcessingGL extends LuvMotionReality {
 
 		loading = 60;
 
-		loadingPhrase = "Start Filter";
+		loadingInfo = "Start Filter";
 
 		feature = cornerFilter.filterFirst(b, new Component(b.getWidth(), b.getHeight()));
 
 		positModifier.modifyComponent(feature);
 		
 		loading = 65;
-		loadingPhrase = "Show Result";
+		loadingInfo = "Show Result";
 
 		loading = 70;
-		loadingPhrase = "Show Angle";
+		loadingInfo = "Show Angle";
 	}
 
 	@Override
@@ -276,9 +276,9 @@ public class ImageProcessingGL extends LuvMotionReality {
 
 		g.drawShadow(20,textHeight+20, "Scene",Color.BLACK);
 
-		g.drawShadow(20,textHeight+40, "AngleX: "+(angleX),Color.BLACK);
+		g.drawShadow(20,textHeight+40, "AngleX: "+(scene.angleX),Color.BLACK);
 
-		g.drawShadow(20,textHeight+60, "AngleY: "+(angleY),Color.BLACK);
+		g.drawShadow(20,textHeight+60, "AngleY: "+(scene.angleY),Color.BLACK);
 	}
 
 }
