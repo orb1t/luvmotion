@@ -30,8 +30,16 @@ import br.com.luvmotion.model.RealityScene;
 import com.jogamp.opengl.util.awt.Screenshot;
 import com.jogamp.opengl.util.texture.Texture;
 
-public class LightSphere extends LuvMotionApplication {
+public class MotionSphere extends LuvMotionApplication {
 
+	//Source: Wikipedia
+	public static final double BALL_RADIUS_POOL_RUSSIAN = 0.034;
+	public static final double BALL_RADIUS_POOL_CAROM = 0.03075;
+	public static final double BALL_RADIUS_POOL_AMERICAN = 0.028575;
+	public static final double BALL_RADIUS_POOL_BRITISH = 0.028;
+	public static final double BALL_RADIUS_SNOOKER = 0.026;
+	public static final double BALL_RADIUS_TABLE_TENNIS = 0.02;	
+	
 	//Scene Stuff
 	private Texture marker;
 
@@ -52,7 +60,7 @@ public class LightSphere extends LuvMotionApplication {
 	
 	private double markerY = -4;
 
-	public LightSphere(int w, int h) {
+	public MotionSphere(int w, int h) {
 		super(w, h);
 	}
 
@@ -125,7 +133,8 @@ public class LightSphere extends LuvMotionApplication {
 
 	private void drawMarker(GL2 gl, double y, double tileSize) {
 		
-		this.drawSphere(gl);
+		this.drawSphere(gl, BALL_RADIUS_TABLE_TENNIS, 0, 0, 0, 16, contentColor);
+		//this.drawSphere(gl, BALL_RADIUS_TABLE_TENNIS, 0, 0, 0);
 		
 		gl.glBegin(GL2.GL_QUADS);
 

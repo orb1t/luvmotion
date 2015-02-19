@@ -3,7 +3,7 @@ import br.com.luvia.core.ApplicationGL;
 import br.com.luvmotion.ar.LuvMotionReality;
 import br.com.luvmotion.ar.PositExample;
 import br.com.luvmotion.ar.PositProcessingGL;
-import br.com.luvmotion.motion.LightSphere;
+import br.com.luvmotion.motion.MotionSphere;
 
 
 public class LuvMotion extends Luvia {
@@ -31,7 +31,7 @@ public class LuvMotion extends Luvia {
 		//return new PositExample(w, h);
 
 		//Motion Examples
-		return new LightSphere(w, h);
+		return new MotionSphere(w, h);
 		
 	}
 
