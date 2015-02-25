@@ -1,5 +1,6 @@
 import br.com.luvia.Luvia;
 import br.com.luvia.core.ApplicationGL;
+import br.com.luvmotion.ar.ImageProcessingGL;
 import br.com.luvmotion.ar.LuvMotionReality;
 import br.com.luvmotion.ar.PositExample;
 import br.com.luvmotion.ar.PositProcessingGL;
@@ -18,7 +19,6 @@ public class LuvMotion extends Luvia {
 		LuvMotion luvmotion = new LuvMotion();
 						
 		luvmotion.init();		
-
 	}
 	
 	@Override

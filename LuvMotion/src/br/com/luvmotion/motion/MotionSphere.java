@@ -1,64 +1,42 @@
 package br.com.luvmotion.motion;
 
-import static javax.media.opengl.GL.GL_LINEAR;
-import static javax.media.opengl.GL.GL_TEXTURE_2D;
-import static javax.media.opengl.GL.GL_TEXTURE_MAG_FILTER;
-import static javax.media.opengl.GL.GL_TEXTURE_MIN_FILTER;
-
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 
-import br.com.abby.util.CameraGL;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.event.PointerEvent;
 import br.com.etyllica.core.graphics.Graphic;
 import br.com.etyllica.core.graphics.SVGColor;
 import br.com.etyllica.core.input.mouse.MouseButton;
-import br.com.luvia.loader.TextureLoader;
-import br.com.luvmotion.LuvMotionApplication;
-import br.com.luvmotion.model.RealityScene;
+import br.com.luvia.geom.Sphere;
+import br.com.luvmotion.ar.LuvMotionReality;
 
-import com.jogamp.opengl.util.awt.Screenshot;
-import com.jogamp.opengl.util.texture.Texture;
+public class MotionSphere extends LuvMotionReality {
 
-public class MotionSphere extends LuvMotionApplication {
-
-	//Source: Wikipedia
+	//Ball Radius in meters (Source: Wikipedia)
 	public static final double BALL_RADIUS_POOL_RUSSIAN = 0.034;
 	public static final double BALL_RADIUS_POOL_CAROM = 0.03075;
 	public static final double BALL_RADIUS_POOL_AMERICAN = 0.028575;
 	public static final double BALL_RADIUS_POOL_BRITISH = 0.028;
 	public static final double BALL_RADIUS_SNOOKER = 0.026;
-	public static final double BALL_RADIUS_TABLE_TENNIS = 0.02;	
+	public static final double BALL_RADIUS_TABLE_TENNIS = 0.02;
 	
 	//Scene Stuff
-	private Texture marker;
-
-	protected CameraGL cameraGL;
-
-	protected float mx = 0;
-
-	protected float my = 0;
-
 	protected boolean click = false;
 
-	protected RealityScene scene = new RealityScene();
-
-	protected BufferedImage pipCamera;
-
 	protected Color markerColor = Color.BLACK;
-	protected Color contentColor = SVGColor.DARK_SALMON;
+	protected Color sphereColor = SVGColor.DARK_SALMON;
 	
 	private double markerY = -4;
+	
+	private Sphere sphere;
 
 	public MotionSphere(int w, int h) {
 		super(w, h);
@@ -74,88 +52,38 @@ public class MotionSphere extends LuvMotionApplication {
 		gl.glDepthFunc(GL.GL_LEQUAL);
 		gl.glShadeModel(GL2.GL_SMOOTH);
 		gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
-
 	}
-
+	
 	@Override
 	public void load() {
-
-		cameraGL = new CameraGL(0, 0.5, 0.0001);
-
-		BufferedImage image = generateMarkerImage();
-
-		pipCamera = image;
-
-		marker = TextureLoader.getInstance().loadTexture(image);
-
+		super.load();
+		
+		sphere = new Sphere(BALL_RADIUS_TABLE_TENNIS);
+		sphere.setX(2);
+		sphere.setColor(sphereColor);
 	}
+	
+	@Override
+	protected BufferedImage generateMarkerImage(int w, int h) {
 
-	private BufferedImage generateMarkerImage() {
-
-		BufferedImage image = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
+		BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = image.createGraphics();
 
-		pipCamera = image;
-
 		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, 200, 200);
+		g.fillRect(0, 0, w, h);
 
-		g.setColor(contentColor);
-		g.fillOval(50, 50, 100, 100);
+		g.setColor(Color.GREEN);
+		g.fillOval(50, 50, w/2, h/2);
 
 		g.setColor(markerColor);
 
 		int strokeSize = 16;
 
 		g.setStroke(new BasicStroke(strokeSize));
-		g.drawRect(strokeSize, strokeSize, 200-strokeSize*2, 200-strokeSize*2);
+		g.drawRect(strokeSize, strokeSize, w-strokeSize*2, h-strokeSize*2);
 
 		return image;
 
-	}
-
-	protected void drawFloor(GL2 gl) {
-
-		gl.glColor3d(1,1,1);
-
-		gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-		double tileSize = 1f;
-
-		marker.enable(gl);
-		marker.bind(gl);
-
-		drawMarker(gl, 0, tileSize);
-
-		marker.disable(gl);
-	}
-
-	private void drawMarker(GL2 gl, double y, double tileSize) {
-		
-		this.drawSphere(gl, BALL_RADIUS_TABLE_TENNIS, 0, 0, 0, 16, contentColor);
-		//this.drawSphere(gl, BALL_RADIUS_TABLE_TENNIS, 0, 0, 0);
-		
-		gl.glBegin(GL2.GL_QUADS);
-
-		//(0,0)
-		gl.glTexCoord2d(0, 0);
-		gl.glVertex3d(-tileSize/2, y, -tileSize/2);
-
-		//(1,0)
-		gl.glTexCoord2d(1, 0);
-		gl.glVertex3d(+tileSize/2, y, -tileSize/2);
-
-		//(1,1)
-		gl.glTexCoord2d(1, 1);
-		gl.glVertex3d(+tileSize/2, y, +tileSize/2);
-
-		//(0,1)
-		gl.glTexCoord2d(0, 1);
-		gl.glVertex3d(-tileSize/2, y, +tileSize/2);
-
-		gl.glEnd();
-		
 	}
 
 	@Override
@@ -186,62 +114,39 @@ public class MotionSphere extends LuvMotionApplication {
 	public GUIEvent updateKeyboard(KeyEvent event) {
 
 		if(event.isKeyDown(KeyEvent.TSK_D)) {
-			scene.offsetX += offset;
-
+			scene.setOffsetX(+offset);
 		} else if(event.isKeyDown(KeyEvent.TSK_A)) {
-
-			scene.offsetX -= offset;
+			scene.setOffsetX(-offset);
 		}
 
 		if(event.isKeyDown(KeyEvent.TSK_W)) {
-			scene.offsetY += offset;
-
+			scene.setOffsetY(+offset);
 		} else if(event.isKeyDown(KeyEvent.TSK_S)) {
-
-			scene.offsetY -= offset;
+			scene.setOffsetY(-offset);
 		}
 
 		if(event.isKeyDown(KeyEvent.TSK_Q)) {
-			scene.offsetZ += offset;
-
+			scene.setOffsetZ(+offset);
 		} else if(event.isKeyDown(KeyEvent.TSK_E)) {
-
-			scene.offsetZ -= offset;
+			scene.setOffsetZ(-offset);
 		}
-
 
 		if(event.isKeyDown(KeyEvent.TSK_UP_ARROW)) {
-
-			scene.angleX += 5;
-
-		}
-
-		else if(event.isKeyDown(KeyEvent.TSK_DOWN_ARROW)) {
-
-			scene.angleX -= 5;
-
+			scene.setOffsetAngleX(+5);
+		} else if(event.isKeyDown(KeyEvent.TSK_DOWN_ARROW)) {
+			scene.setOffsetAngleX(-5);
 		}
 
 		if(event.isKeyDown(KeyEvent.TSK_LEFT_ARROW)) {
-
-			scene.angleY += 5;
-
-		}
-		else if(event.isKeyDown(KeyEvent.TSK_RIGHT_ARROW)) {
-
-			scene.angleY -= 5;
-
+			scene.setOffsetAngleY(+5);
+		} else if(event.isKeyDown(KeyEvent.TSK_RIGHT_ARROW)) {
+			scene.setOffsetAngleY(-5);
 		}
 
 		if(event.isKeyDown(KeyEvent.TSK_M)) {
-
-			scene.angleZ -= 5;
-
-		}
-		else if(event.isKeyDown(KeyEvent.TSK_N)) {
-
-			scene.angleZ += 5;
-
+			scene.setOffsetAngleZ(-5);
+		} else if(event.isKeyDown(KeyEvent.TSK_N)) {
+			scene.setOffsetAngleZ(+5);
 		}
 
 		return GUIEvent.NONE;
@@ -279,18 +184,18 @@ public class MotionSphere extends LuvMotionApplication {
 	
 		//Transform by Camera
 		updateCamera(gl, cameraGL);
-		
-		//
-		
+				
 		gl.glPushMatrix();
 		
 		gl.glTranslated(0, markerY, 0);
 		
-		gl.glTranslated(scene.offsetX, scene.offsetY, scene.offsetZ);
+		gl.glTranslated(scene.getX(), scene.getY(), scene.getZ());
 		
-		gl.glRotated(scene.angleX, 1, 0, 0);
-		gl.glRotated(scene.angleY, 0, 1, 0);
-		gl.glRotated(scene.angleZ, 0, 0, 1);
+		gl.glRotated(scene.getAngleX(), 1, 0, 0);
+		gl.glRotated(scene.getAngleY(), 0, 1, 0);
+		gl.glRotated(scene.getAngleZ(), 0, 0, 1);
+		
+		sphere.draw(gl, glu);
 		
 		drawFloor(gl);
 		
@@ -301,45 +206,29 @@ public class MotionSphere extends LuvMotionApplication {
 
 		//gl.glFlush();
 
-		pipCamera = Screenshot.readToBufferedImage(w, h, false);
-
-		//Erasing Window Title Black Rectangle
-		pipCamera.getGraphics().setColor(Color.WHITE);
-
-		pipCamera.getGraphics().fillRect(0, 0, w, 50);
-
+		updatePipCamera();
 	}
 
 	@Override
 	public void draw(Graphic g) {
 
+		drawPipCamera(g);
+		
 		//Draw Gui
 		g.setColor(Color.WHITE);
 		g.drawShadow(20,20, "Scene",Color.BLACK);
 
-		g.drawShadow(20,40, "AngleX: "+(scene.angleX-5),Color.BLACK);
+		g.drawShadow(20,40, "AngleX: "+(scene.getAngleX()-5),Color.BLACK);
 
-		g.drawShadow(20,60, "AngleY: "+(scene.angleY),Color.BLACK);
-
-		//drawPipCamera(g);
+		g.drawShadow(20,60, "AngleY: "+(scene.getAngleY()),Color.BLACK);
+		
+		g.drawShadow(20,100, "DistanceX: "+(sphere.getX()),Color.BLACK);
+		g.drawShadow(20,120, "DistanceY: "+(cameraGL.getY()+scene.getY()),Color.BLACK);
 
 		//g.escreve(20,20,"Scene");
 		//System.out.println("w = "+w);
 		//System.out.println("h = "+h);
 		//g.drawLine(w/2, h/2, w/2+mx, h/2+my);
-
-	}
-
-	protected void drawPipCamera(Graphic g) {
-
-		//AffineTransform transform = AffineTransform.getScaleInstance(640/w, 480/h);
-		AffineTransform transform = AffineTransform.getScaleInstance(0.2, 0.2);
-
-		AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-
-		BufferedImage camera = op.filter(pipCamera, null);
-
-		g.drawImage(camera, 0, 0);
 
 	}
 

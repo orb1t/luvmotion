@@ -24,6 +24,7 @@ import br.com.etyllica.core.graphics.Graphic;
 import br.com.etyllica.core.input.mouse.MouseButton;
 import br.com.luvia.loader.TextureLoader;
 import br.com.luvmotion.LuvMotionApplication;
+import br.com.luvmotion.capture.PipCamera;
 import br.com.luvmotion.model.RealityScene;
 
 import com.jogamp.opengl.util.awt.Screenshot;
@@ -44,7 +45,7 @@ public class LuvMotionReality extends LuvMotionApplication {
 
 	protected RealityScene scene = new RealityScene();
 
-	protected BufferedImage pipCamera;
+	protected PipCamera pipCamera;
 
 	protected Color markerColor = Color.BLACK;
 	
@@ -71,37 +72,33 @@ public class LuvMotionReality extends LuvMotionApplication {
 	public void load() {
 
 		cameraGL = new CameraGL(0, 0.5, 0.0001);
+		
+		BufferedImage image = generateMarkerImage(200, 200);
 
-		BufferedImage image = generateMarkerImage();
-
-		pipCamera = image;
+		pipCamera = new PipCamera(image);
 
 		marker = TextureLoader.getInstance().loadTexture(image);
-
 	}
 
-	private BufferedImage generateMarkerImage() {
+	protected BufferedImage generateMarkerImage(int w, int h) {
 
-		BufferedImage image = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
+		BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = image.createGraphics();
 
-		pipCamera = image;
-
 		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, 200, 200);
+		g.fillRect(0, 0, w, h);
 
 		g.setColor(Color.BLUE);
-		g.fillOval(50, 50, 100, 100);
+		g.fillOval(50, 50, w/2, h/2);
 
 		g.setColor(markerColor);
 
 		int strokeSize = 16;
 
 		g.setStroke(new BasicStroke(strokeSize));
-		g.drawRect(strokeSize, strokeSize, 200-strokeSize*2, 200-strokeSize*2);
+		g.drawRect(strokeSize, strokeSize, w-strokeSize*2, h-strokeSize*2);
 
 		return image;
-
 	}
 
 	protected void drawFloor(GL2 gl) {
@@ -174,62 +171,39 @@ public class LuvMotionReality extends LuvMotionApplication {
 	public GUIEvent updateKeyboard(KeyEvent event) {
 
 		if(event.isKeyDown(KeyEvent.TSK_D)) {
-			scene.offsetX += offset;
-
+			scene.setOffsetX(+offset);
 		} else if(event.isKeyDown(KeyEvent.TSK_A)) {
-
-			scene.offsetX -= offset;
+			scene.setOffsetX(-offset);
 		}
 
 		if(event.isKeyDown(KeyEvent.TSK_W)) {
-			scene.offsetY += offset;
-
+			scene.setOffsetY(+offset);
 		} else if(event.isKeyDown(KeyEvent.TSK_S)) {
-
-			scene.offsetY -= offset;
+			scene.setOffsetY(-offset);
 		}
 
 		if(event.isKeyDown(KeyEvent.TSK_Q)) {
-			scene.offsetZ += offset;
-
+			scene.setOffsetZ(+offset);
 		} else if(event.isKeyDown(KeyEvent.TSK_E)) {
-
-			scene.offsetZ -= offset;
+			scene.setOffsetZ(-offset);
 		}
-
 
 		if(event.isKeyDown(KeyEvent.TSK_UP_ARROW)) {
-
-			scene.angleX += 5;
-
-		}
-
-		else if(event.isKeyDown(KeyEvent.TSK_DOWN_ARROW)) {
-
-			scene.angleX -= 5;
-
+			scene.setOffsetAngleX(+5);
+		} else if(event.isKeyDown(KeyEvent.TSK_DOWN_ARROW)) {
+			scene.setOffsetAngleX(-5);
 		}
 
 		if(event.isKeyDown(KeyEvent.TSK_LEFT_ARROW)) {
-
-			scene.angleY += 5;
-
-		}
-		else if(event.isKeyDown(KeyEvent.TSK_RIGHT_ARROW)) {
-
-			scene.angleY -= 5;
-
+			scene.setOffsetAngleY(+5);
+		} else if(event.isKeyDown(KeyEvent.TSK_RIGHT_ARROW)) {
+			scene.setOffsetAngleY(-5);
 		}
 
 		if(event.isKeyDown(KeyEvent.TSK_M)) {
-
-			scene.angleZ -= 5;
-
-		}
-		else if(event.isKeyDown(KeyEvent.TSK_N)) {
-
-			scene.angleZ += 5;
-
+			scene.setOffsetAngleZ(-5);
+		} else if(event.isKeyDown(KeyEvent.TSK_N)) {
+			scene.setOffsetAngleZ(+5);
 		}
 
 		return GUIEvent.NONE;
@@ -285,13 +259,16 @@ public class LuvMotionReality extends LuvMotionApplication {
 
 		//gl.glFlush();
 
-		pipCamera = Screenshot.readToBufferedImage(w, h, false);
+		updatePipCamera();
+
+	}
+
+	protected void updatePipCamera() {
+		pipCamera.setBuffer(Screenshot.readToBufferedImage(w, h, false));
 
 		//Erasing Window Title Black Rectangle
 		pipCamera.getGraphics().setColor(Color.WHITE);
-
 		pipCamera.getGraphics().fillRect(0, 0, w, 50);
-
 	}
 
 	@Override
@@ -301,9 +278,9 @@ public class LuvMotionReality extends LuvMotionApplication {
 		g.setColor(Color.WHITE);
 		g.drawShadow(20,20, "Scene",Color.BLACK);
 
-		g.drawShadow(20,40, "AngleX: "+(scene.angleX-5),Color.BLACK);
+		g.drawShadow(20,40, "AngleX: "+(scene.getAngleX()-5),Color.BLACK);
 
-		g.drawShadow(20,60, "AngleY: "+(scene.angleY),Color.BLACK);
+		g.drawShadow(20,60, "AngleY: "+(scene.getAngleY()),Color.BLACK);
 
 		//drawPipCamera(g);
 
@@ -321,10 +298,9 @@ public class LuvMotionReality extends LuvMotionApplication {
 
 		AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
 
-		BufferedImage camera = op.filter(pipCamera, null);
+		BufferedImage camera = op.filter(pipCamera.getBuffer(), null);
 
 		g.drawImage(camera, 0, 0);
-
 	}
 
 }

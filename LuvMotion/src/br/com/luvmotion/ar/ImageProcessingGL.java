@@ -99,7 +99,7 @@ public class ImageProcessingGL extends LuvMotionReality {
 		
 		if(!hide){
 
-			reset(pipCamera);
+			reset(pipCamera.getBuffer());
 
 			if(drawSphere){
 				drawSphere(gl);

@@ -42,14 +42,6 @@ public abstract class LuvMotionApplication extends ApplicationGL {
 
 		gl.glPopMatrix();		
 	}
-
-	public void setColor(GL2 gl, Color color) {
-		float red = ((float)color.getRed()/255);
-		float green = ((float)color.getGreen()/255);
-		float blue = ((float)color.getBlue()/255);
-				
-		gl.glColor3f(red, green, blue);
-	}
 	
 	protected void drawSphere(GL2 gl, double radius, double x,
 			double y, double z, int resolution) {
@@ -70,8 +62,7 @@ public abstract class LuvMotionApplication extends ApplicationGL {
 
 		glu.gluDeleteQuadric(sphere);
 
-		gl.glPopMatrix();
-		
+		gl.glPopMatrix();		
 	}
 	
 	private GLUquadric generateSphereQuadric() {

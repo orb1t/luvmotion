@@ -168,7 +168,7 @@ public class PositProcessingGL extends LuvMotionReality {
 						
 		}
 					
-		calculate(pipCamera);
+		calculate(pipCamera.getBuffer());
 				
 	}
 	
@@ -315,12 +315,12 @@ public class PositProcessingGL extends LuvMotionReality {
 	
 	private void drawRealData(Graphic g) {
 		
-		g.drawString("X = "+scene.offsetX, 720, textHeight+250);
-		g.drawString("Y = "+scene.offsetY, 720, textHeight+275);
-		g.drawString("Z = "+scene.offsetZ, 720, textHeight+300);
+		g.drawString("X = "+scene.x, 720, textHeight+250);
+		g.drawString("Y = "+scene.y, 720, textHeight+275);
+		g.drawString("Z = "+scene.z, 720, textHeight+300);
 		
-		double xFactor = scene.offsetX/axis.getX();
-		double zFactor = scene.offsetZ/axis.getZ();
+		double xFactor = scene.x/axis.getX();
+		double zFactor = scene.z/axis.getZ();
 		
 		g.drawString("FX = "+xFactor, 720, textHeight+175);
 		g.drawString("FZ = "+zFactor, 720, textHeight+200);
