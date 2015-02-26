@@ -315,12 +315,12 @@ public class PositProcessingGL extends LuvMotionReality {
 	
 	private void drawRealData(Graphic g) {
 		
-		g.drawString("X = "+scene.x, 720, textHeight+250);
-		g.drawString("Y = "+scene.y, 720, textHeight+275);
-		g.drawString("Z = "+scene.z, 720, textHeight+300);
+		g.drawString("X = "+scene.getX(), 720, textHeight+250);
+		g.drawString("Y = "+scene.getY(), 720, textHeight+275);
+		g.drawString("Z = "+scene.getZ(), 720, textHeight+300);
 		
-		double xFactor = scene.x/axis.getX();
-		double zFactor = scene.z/axis.getZ();
+		double xFactor = scene.getX()/axis.getX();
+		double zFactor = scene.getY()/axis.getZ();
 		
 		g.drawString("FX = "+xFactor, 720, textHeight+175);
 		g.drawString("FZ = "+zFactor, 720, textHeight+200);
@@ -408,9 +408,9 @@ public class PositProcessingGL extends LuvMotionReality {
 
 		g.drawShadow(20,textHeight+20, "Scene",Color.BLACK);
 
-		g.drawShadow(20,textHeight+40, "AngleX: "+(scene.angleX),Color.BLACK);
+		g.drawShadow(20,textHeight+40, "AngleX: "+(scene.getAngleX()),Color.BLACK);
 
-		g.drawShadow(20,textHeight+60, "AngleY: "+(scene.angleY),Color.BLACK);
+		g.drawShadow(20,textHeight+60, "AngleY: "+(scene.getAngleY()),Color.BLACK);
 	}
 
 }

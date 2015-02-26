@@ -60,7 +60,8 @@ public class MotionSphere extends LuvMotionReality {
 	public void load() {
 		super.load();
 		
-		cameraGL.setY(3);
+		cameraGL.setY(1.5);
+		cameraGL.setX(2.6);
 		
 		sphere = new Sphere(BALL_RADIUS_TABLE_TENNIS);
 		sphere.setX(1);
@@ -158,7 +159,7 @@ public class MotionSphere extends LuvMotionReality {
 		} else if(event.isKeyDown(KeyEvent.TSK_X)) {
 			cameraGL.setOffsetY(+0.5);
 		}
-
+		
 		return GUIEvent.NONE;
 	}
 
@@ -181,7 +182,6 @@ public class MotionSphere extends LuvMotionReality {
 			cameraGL.setTarget(sphere);
 		}
 		
-
 		return GUIEvent.NONE;
 	}
 
@@ -202,12 +202,14 @@ public class MotionSphere extends LuvMotionReality {
 				
 		gl.glPushMatrix();
 				
-		scene.updateScene(gl);		
+		scene.updateScene(gl);
 		
 		sphere.draw(gl, glu);
 		origin.draw(gl, glu);
 		
 		drawFloor(gl);
+		
+		drawCamera(gl, cameraGL);
 		
 		gl.glPopMatrix();
 
@@ -215,7 +217,7 @@ public class MotionSphere extends LuvMotionReality {
 
 		updatePipCamera();
 	}
-
+	
 	@Override
 	public void draw(Graphic g) {
 

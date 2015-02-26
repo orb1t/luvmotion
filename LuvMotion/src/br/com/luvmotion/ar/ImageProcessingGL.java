@@ -276,9 +276,9 @@ public class ImageProcessingGL extends LuvMotionReality {
 
 		g.drawShadow(20,textHeight+20, "Scene",Color.BLACK);
 
-		g.drawShadow(20,textHeight+40, "AngleX: "+(scene.angleX),Color.BLACK);
+		g.drawShadow(20,textHeight+40, "AngleX: "+(scene.getAngleX()),Color.BLACK);
 
-		g.drawShadow(20,textHeight+60, "AngleY: "+(scene.angleY),Color.BLACK);
+		g.drawShadow(20,textHeight+60, "AngleY: "+(scene.getAngleY()),Color.BLACK);
 	}
 
 }
