@@ -9,6 +9,7 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 
+import br.com.abby.linear.Point3D;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.event.PointerEvent;
@@ -34,9 +35,10 @@ public class MotionSphere extends LuvMotionReality {
 	protected Color markerColor = Color.BLACK;
 	protected Color sphereColor = SVGColor.DARK_SALMON;
 	
-	private double markerY = -4;
-	
 	private Sphere sphere;
+	private Sphere origin;
+
+	private double offset = 0.5;
 
 	public MotionSphere(int w, int h) {
 		super(w, h);
@@ -51,16 +53,21 @@ public class MotionSphere extends LuvMotionReality {
 		gl.glEnable(GL.GL_DEPTH_TEST);
 		gl.glDepthFunc(GL.GL_LEQUAL);
 		gl.glShadeModel(GL2.GL_SMOOTH);
-		gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
+		gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);		
 	}
 	
 	@Override
 	public void load() {
 		super.load();
 		
+		cameraGL.setY(3);
+		
 		sphere = new Sphere(BALL_RADIUS_TABLE_TENNIS);
-		sphere.setX(2);
+		sphere.setX(1);
 		sphere.setColor(sphereColor);
+		
+		origin = new Sphere(BALL_RADIUS_TABLE_TENNIS);
+		origin.setColor(SVGColor.MISTYROSE);
 	}
 	
 	@Override
@@ -105,10 +112,7 @@ public class MotionSphere extends LuvMotionReality {
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 
 		//gl.glLoadIdentity();
-
-	}	
-
-	private double offset = 0.5; 
+	}
 
 	@Override
 	public GUIEvent updateKeyboard(KeyEvent event) {
@@ -148,6 +152,12 @@ public class MotionSphere extends LuvMotionReality {
 		} else if(event.isKeyDown(KeyEvent.TSK_N)) {
 			scene.setOffsetAngleZ(+5);
 		}
+		
+		if(event.isKeyDown(KeyEvent.TSK_Z)) {
+			cameraGL.setOffsetY(-0.5);
+		} else if(event.isKeyDown(KeyEvent.TSK_X)) {
+			cameraGL.setOffsetY(+0.5);
+		}
 
 		return GUIEvent.NONE;
 	}
@@ -166,6 +176,11 @@ public class MotionSphere extends LuvMotionReality {
 			cameraGL.setZ(cameraGL.getZ()-0.1f);
 			click = false;
 		}
+		
+		if(event.isButtonUp(MouseButton.MOUSE_BUTTON_RIGHT)) {
+			cameraGL.setTarget(sphere);
+		}
+		
 
 		return GUIEvent.NONE;
 	}
@@ -186,23 +201,15 @@ public class MotionSphere extends LuvMotionReality {
 		updateCamera(gl, cameraGL);
 				
 		gl.glPushMatrix();
-		
-		gl.glTranslated(0, markerY, 0);
-		
-		gl.glTranslated(scene.getX(), scene.getY(), scene.getZ());
-		
-		gl.glRotated(scene.getAngleX(), 1, 0, 0);
-		gl.glRotated(scene.getAngleY(), 0, 1, 0);
-		gl.glRotated(scene.getAngleZ(), 0, 0, 1);
+				
+		scene.updateScene(gl);		
 		
 		sphere.draw(gl, glu);
+		origin.draw(gl, glu);
 		
 		drawFloor(gl);
 		
 		gl.glPopMatrix();
-
-		//Draw Scene
-
 
 		//gl.glFlush();
 
@@ -214,22 +221,28 @@ public class MotionSphere extends LuvMotionReality {
 
 		drawPipCamera(g);
 		
-		//Draw Gui
+		//Draw Info
 		g.setColor(Color.WHITE);
-		g.drawShadow(20,20, "Scene",Color.BLACK);
-
-		g.drawShadow(20,40, "AngleX: "+(scene.getAngleX()-5),Color.BLACK);
-
-		g.drawShadow(20,60, "AngleY: "+(scene.getAngleY()),Color.BLACK);
+		g.setShadowColor(Color.BLACK);
+		g.drawShadow(20,20, "Scene");
+		g.drawShadow(20,40, "AngleX: "+(scene.getAngleX()-5));
+		g.drawShadow(20,60, "AngleY: "+(scene.getAngleY()));		
 		
-		g.drawShadow(20,100, "DistanceX: "+(sphere.getX()),Color.BLACK);
-		g.drawShadow(20,120, "DistanceY: "+(cameraGL.getY()+scene.getY()),Color.BLACK);
+		g.drawShadow(20,100, "DistanceX: "+(sphere.getX()));
+		g.drawShadow(20,120, "DistanceY: "+(cameraGL.getY()+scene.getY()));
+		g.drawShadow(20,140, "DistanceZ: "+(cameraGL.getZ()+scene.getZ()));
+		
+		drawCoordinates(g, cameraGL);
+	}
+	
+	private void drawCoordinates(Graphic g, Point3D point) {
 
-		//g.escreve(20,20,"Scene");
-		//System.out.println("w = "+w);
-		//System.out.println("h = "+h);
-		//g.drawLine(w/2, h/2, w/2+mx, h/2+my);
-
+		g.setColor(Color.WHITE);
+		g.setShadowColor(Color.BLACK);
+		
+		g.drawShadow(500,20, "X: "+(point.getX()));
+		g.drawShadow(500,40, "Y: "+(point.getY()));
+		g.drawShadow(500,60, "Z: "+(point.getZ()));
 	}
 
 }
