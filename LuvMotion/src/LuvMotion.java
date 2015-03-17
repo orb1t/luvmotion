@@ -4,6 +4,7 @@ import br.com.luvmotion.ar.ImageProcessingGL;
 import br.com.luvmotion.ar.LuvMotionReality;
 import br.com.luvmotion.ar.PositExample;
 import br.com.luvmotion.ar.PositProcessingGL;
+import br.com.luvmotion.motion.DualSpheres;
 import br.com.luvmotion.motion.MotionSphere;
 
 
@@ -31,7 +32,8 @@ public class LuvMotion extends Luvia {
 		//return new PositExample(w, h);
 
 		//Motion Examples
-		return new MotionSphere(w, h);
+		//return new MotionSphere(w, h);
+		return new DualSpheres(w, h);
 		
 	}
 

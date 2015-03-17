@@ -229,7 +229,7 @@ public abstract class LuvMotionApplication extends ApplicationGL {
 		drawPoint(gl, camera.getTarget(), color);
 
 		//Draw target line
-		//drawLine(gl, camera, camera.getTarget());
+		drawLine(gl, camera, camera.getTarget());
 
 		//Draw Camera as 3D Model
 		gl.glPushMatrix();

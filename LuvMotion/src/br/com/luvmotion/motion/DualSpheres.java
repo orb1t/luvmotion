@@ -21,33 +21,27 @@ import br.com.etyllica.motion.filter.ColorFilter;
 import br.com.luvia.geom.Sphere;
 import br.com.luvmotion.ar.LuvMotionReality;
 
-public class MotionSphere extends LuvMotionReality {
+public class DualSpheres extends LuvMotionReality {
 
 	int windowHeight = 40;
 	
 	private ColorFilter filter;
-	protected Component feature;
-	
-	//Ball Radius in meters (Source: Wikipedia)
-	public static final double BALL_RADIUS_POOL_RUSSIAN = 0.034;
-	public static final double BALL_RADIUS_POOL_CAROM = 0.03075;
-	public static final double BALL_RADIUS_POOL_AMERICAN = 0.028575;
-	public static final double BALL_RADIUS_POOL_BRITISH = 0.028;
-	public static final double BALL_RADIUS_SNOOKER = 0.026;
-	public static final double BALL_RADIUS_TABLE_TENNIS = 0.02;
+	protected Component orangeFeature;
+	protected Component blueFeature;
 	
 	//Scene Stuff
 	protected boolean click = false;
 
 	protected Color markerColor = Color.BLACK;
-	protected Color sphereColor = SVGColor.DARK_SALMON;
+	protected Color orangeColor = SVGColor.ORANGE;
+	protected Color blueColor = SVGColor.ALICE_BLUE;
 	
-	private Sphere sphere;
-	private Sphere origin;
+	private Sphere orange;
+	private Sphere blue;
 
 	private double offset = 0.5;
 
-	public MotionSphere(int w, int h) {
+	public DualSpheres(int w, int h) {
 		super(w, h);
 	}
 
@@ -70,18 +64,19 @@ public class MotionSphere extends LuvMotionReality {
 		cameraGL.setY(1.5);
 		cameraGL.setX(2.6);
 		
-		sphere = new Sphere(BALL_RADIUS_TABLE_TENNIS);
-		sphere.setX(1);
-		sphere.setColor(sphereColor);
+		orange = new Sphere(MotionSphere.BALL_RADIUS_TABLE_TENNIS);
+		orange.setX(1);
+		orange.setColor(orangeColor);
 		
-		origin = new Sphere(BALL_RADIUS_TABLE_TENNIS);
-		origin.setColor(SVGColor.ALICE_BLUE);
+		blue = new Sphere(MotionSphere.BALL_RADIUS_TABLE_TENNIS);
+		blue.setColor(blueColor);
 		
 		//Load Color Filter based on PipCamera attributes
-		filter = new ColorFilter(w, h, sphereColor);
+		filter = new ColorFilter(w, h);
 		filter.setTolerance(0x30);
 		
-		feature = new Component(w, h);
+		orangeFeature = new Component(w, h);
+		blueFeature = new Component(w, h);
 	}
 	
 	@Override
@@ -92,9 +87,6 @@ public class MotionSphere extends LuvMotionReality {
 
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, w, h);
-
-		g.setColor(Color.GREEN);
-		g.fillOval(50, 50, w/2, h/2);
 
 		g.setColor(markerColor);
 
@@ -192,7 +184,7 @@ public class MotionSphere extends LuvMotionReality {
 		}
 		
 		if(event.isButtonUp(MouseButton.MOUSE_BUTTON_RIGHT)) {
-			cameraGL.setTarget(sphere);
+			cameraGL.setTarget(orange);
 		}
 		
 		return GUIEvent.NONE;
@@ -217,8 +209,8 @@ public class MotionSphere extends LuvMotionReality {
 				
 		scene.updateScene(gl);
 		
-		sphere.draw(gl, glu);
-		origin.draw(gl, glu);
+		orange.draw(gl, glu);
+		blue.draw(gl, glu);
 		
 		drawFloor(gl);
 		
@@ -237,7 +229,12 @@ public class MotionSphere extends LuvMotionReality {
 		
 		Component screen = new Component(buffer.getWidth(), buffer.getHeight());
 		
-		feature = filter.filterFirst(buffer, screen);
+		filter.setColor(orangeColor);
+		orangeFeature = filter.filterFirst(buffer, screen);
+		
+		filter.setColor(blueColor);
+		blueFeature = filter.filterFirst(buffer, screen);
+		
 	}
 	
 	@Override
@@ -245,9 +242,8 @@ public class MotionSphere extends LuvMotionReality {
 
 		drawPipCamera(g);
 		
-		if(feature != null) {
-			g.drawRect(feature.getX(), feature.getY()-windowHeight, feature.getW(), feature.getH());
-		}
+		drawFeature(g, orangeFeature);
+		drawFeature(g, blueFeature);
 		
 		//Draw Info
 		g.setColor(Color.WHITE);
@@ -256,11 +252,19 @@ public class MotionSphere extends LuvMotionReality {
 		g.drawShadow(20,40, "AngleX: "+(scene.getAngleX()-5));
 		g.drawShadow(20,60, "AngleY: "+(scene.getAngleY()));		
 		
-		g.drawShadow(20,100, "DistanceX: "+(sphere.getX()));
+		g.drawShadow(20,100, "DistanceX: "+(orange.getX()));
 		g.drawShadow(20,120, "DistanceY: "+(cameraGL.getY()+scene.getY()));
 		g.drawShadow(20,140, "DistanceZ: "+(cameraGL.getZ()+scene.getZ()));
 		
 		drawCoordinates(g, cameraGL);
+	}
+
+	protected void drawFeature(Graphic g, Component component) {
+		if(component == null) {
+			return;
+		}
+			
+		g.drawRect(component.getX(), component.getY()-windowHeight, component.getW(), component.getH());		
 	}
 	
 	private void drawCoordinates(Graphic g, Point3D point) {
