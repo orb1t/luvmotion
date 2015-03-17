@@ -78,7 +78,8 @@ public class MotionSphere extends LuvMotionReality {
 		origin.setColor(SVGColor.ALICE_BLUE);
 		
 		//Load Color Filter based on PipCamera attributes
-		filter = new ColorFilter(w, h, sphereColor);
+		filter = new ColorFilter(w, h);
+		filter.setColor(sphereColor);
 		filter.setTolerance(0x30);
 		
 		feature = new Component(w, h);

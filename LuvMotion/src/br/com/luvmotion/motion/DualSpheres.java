@@ -29,17 +29,15 @@ public class DualSpheres extends LuvMotionReality {
 	protected Component orangeFeature;
 	protected Component blueFeature;
 	
-	//Scene Stuff
-	protected boolean click = false;
-
-	protected Color markerColor = Color.BLACK;
 	protected Color orangeColor = SVGColor.ORANGE;
-	protected Color blueColor = SVGColor.ALICE_BLUE;
+	protected Color blueColor = SVGColor.SKY_BLUE;
 	
 	private Sphere orange;
 	private Sphere blue;
 
 	private double offset = 0.5;
+	
+	private boolean needReset = false;
 
 	public DualSpheres(int w, int h) {
 		super(w, h);
@@ -73,10 +71,17 @@ public class DualSpheres extends LuvMotionReality {
 		
 		//Load Color Filter based on PipCamera attributes
 		filter = new ColorFilter(w, h);
-		filter.setTolerance(0x30);
+		filter.setTolerance(0x10);
 		
 		orangeFeature = new Component(w, h);
 		blueFeature = new Component(w, h);
+		
+		updateAtFixedRate(50);
+	}
+		
+	@Override
+	public void timeUpdate(long now) {
+		needReset = true;
 	}
 	
 	@Override
@@ -222,16 +227,17 @@ public class DualSpheres extends LuvMotionReality {
 		
 		updatePipCamera();
 		
-		reset(pipCamera.getBuffer());
+		if(needReset)
+			reset(pipCamera.getBuffer());
 	}
 	
 	private void reset(BufferedImage buffer) {
 		
-		Component screen = new Component(buffer.getWidth(), buffer.getHeight());
+		Component screen = new Component(0,0,buffer.getWidth(), buffer.getHeight());
 		
 		filter.setColor(orangeColor);
 		orangeFeature = filter.filterFirst(buffer, screen);
-		
+				
 		filter.setColor(blueColor);
 		blueFeature = filter.filterFirst(buffer, screen);
 		
@@ -242,6 +248,7 @@ public class DualSpheres extends LuvMotionReality {
 
 		drawPipCamera(g);
 		
+		g.setColor(Color.BLACK);
 		drawFeature(g, orangeFeature);
 		drawFeature(g, blueFeature);
 		
@@ -263,12 +270,11 @@ public class DualSpheres extends LuvMotionReality {
 		if(component == null) {
 			return;
 		}
-			
-		g.drawRect(component.getX(), component.getY()-windowHeight, component.getW(), component.getH());		
+		
+		g.drawOval(component.getX(), component.getY()-windowHeight, component.getW(), component.getH());
 	}
 	
 	private void drawCoordinates(Graphic g, Point3D point) {
-
 		g.setColor(Color.WHITE);
 		g.setShadowColor(Color.BLACK);
 		

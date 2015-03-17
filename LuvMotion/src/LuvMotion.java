@@ -18,7 +18,7 @@ public class LuvMotion extends Luvia {
 	public static void main(String[] args) {
 
 		LuvMotion luvmotion = new LuvMotion();
-						
+		
 		luvmotion.init();		
 	}
 	

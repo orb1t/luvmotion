@@ -118,7 +118,7 @@ public class LuvMotionReality extends LuvMotionApplication {
 		marker.disable(gl);
 	}
 
-	private void drawMarker(GL2 gl, double y, double tileSize) {
+	protected void drawMarker(GL2 gl, double y, double tileSize) {
 		
 		gl.glBegin(GL2.GL_QUADS);
 
