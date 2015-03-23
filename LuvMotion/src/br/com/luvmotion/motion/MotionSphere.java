@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
-import javax.media.opengl.GLAutoDrawable;
 
 import br.com.abby.linear.Point3D;
 import br.com.etyllica.core.event.GUIEvent;
@@ -18,6 +17,7 @@ import br.com.etyllica.core.graphics.SVGColor;
 import br.com.etyllica.core.input.mouse.MouseButton;
 import br.com.etyllica.motion.core.features.Component;
 import br.com.etyllica.motion.filter.ColorFilter;
+import br.com.luvia.core.video.Graphics3D;
 import br.com.luvia.geom.Sphere;
 import br.com.luvmotion.ar.LuvMotionReality;
 
@@ -52,7 +52,7 @@ public class MotionSphere extends LuvMotionReality {
 	}
 
 	@Override
-	public void init(GLAutoDrawable drawable) {
+	public void init(Graphics3D drawable) {
 
 		GL2 gl = drawable.getGL().getGL2();
 
@@ -109,7 +109,7 @@ public class MotionSphere extends LuvMotionReality {
 	}
 
 	@Override
-	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
+	public void reshape(Graphics3D drawable, int x, int y, int width, int height) {
 
 		GL2 gl = drawable.getGL().getGL2();
 
@@ -200,7 +200,7 @@ public class MotionSphere extends LuvMotionReality {
 	}
 
 	@Override
-	public void display(GLAutoDrawable drawable) {
+	public void display(Graphics3D drawable) {
 
 		GL2 gl = drawable.getGL().getGL2();
 

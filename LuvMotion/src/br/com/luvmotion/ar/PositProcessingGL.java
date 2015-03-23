@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
-import javax.media.opengl.GLAutoDrawable;
 
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
@@ -17,14 +16,11 @@ import br.com.etyllica.motion.core.helper.RotationAxis;
 import br.com.etyllica.motion.filter.color.ColorStrategy;
 import br.com.etyllica.motion.filter.search.FloodFillSearch;
 import br.com.etyllica.motion.filter.validation.MaxComponentDimension;
-import br.com.etyllica.motion.math.interpolation.Interpolator;
-import br.com.etyllica.motion.math.interpolation.LagrangeInterpolator;
 import br.com.etyllica.motion.math.interpolation.QuadraticInterpolator;
 import br.com.etyllica.motion.modifier.PositCoplanarModifier;
-import br.com.etyllica.motion.modifier.hull.AugmentedMarkerModifier;
-import br.com.etyllica.motion.modifier.hull.FastConvexHullModifier;
 import br.com.etyllica.motion.modifier.hull.HullModifier;
 import br.com.etyllica.motion.modifier.hull.RectangularOGRModifier;
+import br.com.luvia.core.video.Graphics3D;
 
 public class PositProcessingGL extends LuvMotionReality {
 
@@ -105,7 +101,8 @@ public class PositProcessingGL extends LuvMotionReality {
 	
 	private Point3D point = new Point3D(0, 0, 0);
 	
-	public void display(GLAutoDrawable drawable) {
+	@Override
+	public void display(Graphics3D drawable) {
 		
 		GL2 gl = drawable.getGL().getGL2();
 		

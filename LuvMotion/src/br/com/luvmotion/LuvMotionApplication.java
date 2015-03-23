@@ -9,7 +9,7 @@ import javax.media.opengl.glu.GLUquadric;
 
 import br.com.abby.linear.Point3D;
 import br.com.abby.util.CameraGL;
-import br.com.luvia.core.ApplicationGL;
+import br.com.luvia.core.context.ApplicationGL;
 
 public abstract class LuvMotionApplication extends ApplicationGL {
 

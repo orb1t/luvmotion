@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 import javax.media.opengl.GL2;
-import javax.media.opengl.GLAutoDrawable;
 
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
@@ -15,6 +14,7 @@ import br.com.etyllica.motion.filter.color.ColorStrategy;
 import br.com.etyllica.motion.filter.search.FloodFillSearch;
 import br.com.etyllica.motion.modifier.PositCoplanarModifier;
 import br.com.etyllica.motion.modifier.hull.AugmentedMarkerModifier;
+import br.com.luvia.core.video.Graphics3D;
 
 public class ImageProcessingGL extends LuvMotionReality {
 
@@ -87,7 +87,8 @@ public class ImageProcessingGL extends LuvMotionReality {
 
 	}
 
-	public void display(GLAutoDrawable drawable) {
+	@Override
+	public void display(Graphics3D drawable) {
 		
 		GL2 gl = drawable.getGL().getGL2();
 		

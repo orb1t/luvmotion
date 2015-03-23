@@ -12,7 +12,8 @@ import br.com.etyllica.core.event.PointerEvent;
 import br.com.etyllica.core.graphics.Graphic;
 import br.com.etyllica.motion.camera.Camera;
 import br.com.etyllica.motion.camera.CameraV4L4J;
-import br.com.luvia.core.ApplicationGL;
+import br.com.luvia.core.context.ApplicationGL;
+import br.com.luvia.core.video.Graphics3D;
 
 public class PositExample extends ApplicationGL {
 
@@ -31,7 +32,7 @@ public class PositExample extends ApplicationGL {
 	}
 
 	@Override
-	public void init(GLAutoDrawable drawable) {
+	public void init(Graphics3D drawable) {
 
 		GL2 gl = drawable.getGL().getGL2();
 
@@ -44,7 +45,7 @@ public class PositExample extends ApplicationGL {
 	}
 
 	@Override
-	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
+	public void reshape(Graphics3D drawable, int x, int y, int width, int height) {
 
 		GL2 gl = drawable.getGL().getGL2();
 
@@ -66,7 +67,7 @@ public class PositExample extends ApplicationGL {
 	}	
 	
 	@Override
-	public void display(GLAutoDrawable drawable) {
+	public void display(Graphics3D drawable) {
 
 		GL2 gl = drawable.getGL().getGL2();
 
