@@ -5,6 +5,7 @@ import java.awt.Color;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.glu.GLU;
 
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
@@ -47,7 +48,8 @@ public class PositExample extends ApplicationGL {
 	@Override
 	public void reshape(Graphics3D drawable, int x, int y, int width, int height) {
 
-		GL2 gl = drawable.getGL().getGL2();
+		GL2 gl = drawable.getGL2();
+		GLU glu = drawable.getGLU();
 
 		gl.glViewport (x, y, width, height);
 

@@ -103,12 +103,10 @@ public class PositProcessingGL extends LuvMotionReality {
 	
 	@Override
 	public void display(Graphics3D drawable) {
-		
-		GL2 gl = drawable.getGL().getGL2();
-		
-		//gl.glPushMatrix();
 		//Draw Marker Scene
-		super.display(drawable);
+		super.display(drawable);		
+
+		GL2 gl = drawable.getGL().getGL2();
 		
 		//Erase Marker
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
@@ -118,7 +116,7 @@ public class PositProcessingGL extends LuvMotionReality {
 				
 		if(feature.getPoints().size()>3) {
 
-			resetScene(gl);
+			resetScene(drawable);
 						
 			double angle = axis.getAngle();
 			double rx = axis.getRotationX();
@@ -141,9 +139,9 @@ public class PositProcessingGL extends LuvMotionReality {
 				//gl.glScalef(1.f, -1.f, 1.f);
 				
 				if(drawSphere) {
-					drawSphere(gl);
+					drawable.drawSphere(1, 0, 0, 0);
 				}else{
-					drawCube(gl);
+					drawable.drawCube();
 					//drawPyramid(gl);
 				}
 				
@@ -161,7 +159,7 @@ public class PositProcessingGL extends LuvMotionReality {
 						
 			point = axis.transformPoint(axisMarker);
 						
-			drawSphere(gl, 0.5, point.getX(), point.getY(), point.getZ());
+			drawable.drawSphere(0.5, point.getX(), point.getY(), point.getZ());
 						
 		}
 					
@@ -180,9 +178,10 @@ public class PositProcessingGL extends LuvMotionReality {
 	}
 	
 	
-	private void resetScene(GL2 gl) {
+	private void resetScene(Graphics3D g) {
+		GL2 gl = g.getGL2();
 		gl.glLoadIdentity();
-		updateCamera(gl, cameraGL);
+		g.updateCamera(cameraGL);
 	}
 	
 	private void drawAxis(GL2 gl) {

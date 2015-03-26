@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.glu.GLU;
 
 import br.com.abby.linear.Point3D;
 import br.com.etyllica.core.event.GUIEvent;
@@ -107,7 +108,8 @@ public class DualSpheres extends LuvMotionReality {
 	@Override
 	public void reshape(Graphics3D drawable, int x, int y, int width, int height) {
 
-		GL2 gl = drawable.getGL().getGL2();
+		GL2 gl = drawable.getGL2();
+		GLU glu = drawable.getGLU();
 
 		gl.glViewport (x, y, width, height);
 
@@ -198,7 +200,8 @@ public class DualSpheres extends LuvMotionReality {
 	@Override
 	public void display(Graphics3D drawable) {
 
-		GL2 gl = drawable.getGL().getGL2();
+		GL2 gl = drawable.getGL2();
+		GLU glu = drawable.getGLU();
 
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 		gl.glClearColor(1f, 1f, 1f, 1);
@@ -208,7 +211,7 @@ public class DualSpheres extends LuvMotionReality {
 		gl.glDepthMask(true);*/
 	
 		//Transform by Camera
-		updateCamera(gl, cameraGL);
+		drawable.updateCamera(cameraGL);
 				
 		gl.glPushMatrix();
 				
@@ -219,7 +222,7 @@ public class DualSpheres extends LuvMotionReality {
 		
 		drawFloor(gl);
 		
-		drawCamera(gl, cameraGL);
+		drawable.drawCamera(cameraGL);
 		
 		gl.glPopMatrix();
 

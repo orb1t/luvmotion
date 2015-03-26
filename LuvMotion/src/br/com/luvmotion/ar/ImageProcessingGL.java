@@ -89,10 +89,6 @@ public class ImageProcessingGL extends LuvMotionReality {
 
 	@Override
 	public void display(Graphics3D drawable) {
-		
-		GL2 gl = drawable.getGL().getGL2();
-		
-		//gl.glPushMatrix();
 		//Draw Marker Scene
 		super.display(drawable);
 		
@@ -103,10 +99,10 @@ public class ImageProcessingGL extends LuvMotionReality {
 			reset(pipCamera.getBuffer());
 
 			if(drawSphere){
-				drawSphere(gl);
+				drawable.drawSphere(1,0,0,0);
 			}else{
-				//drawCube(gl);
-				drawPyramid(gl);
+				//drawable.drawCube();
+				drawable.drawPyramid();
 			}
 			
 			if(feature!=null){
