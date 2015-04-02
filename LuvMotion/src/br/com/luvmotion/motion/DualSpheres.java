@@ -4,6 +4,12 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
@@ -21,6 +27,7 @@ import br.com.etyllica.motion.filter.ColorFilter;
 import br.com.luvia.core.video.Graphics3D;
 import br.com.luvia.geom.Sphere;
 import br.com.luvmotion.ar.LuvMotionReality;
+import br.com.luvmotion.model.Trail;
 
 public class DualSpheres extends LuvMotionReality {
 
@@ -36,10 +43,19 @@ public class DualSpheres extends LuvMotionReality {
 	private Sphere orange;
 	private Sphere blue;
 
-	private double offset = 0.5;
+	private double offset = 0.05;
+	private double turnSpeed = 2;
+	
+	private double offsetBall = 0.08;
 	
 	private boolean needReset = false;
-
+	
+	private Set<Integer> registeredKeys;
+	private Map<Integer, Boolean> keyStates;
+	
+	private Trail orangeTrail;
+	private Trail blueTrail;
+		
 	public DualSpheres(int w, int h) {
 		super(w, h);
 	}
@@ -61,13 +77,17 @@ public class DualSpheres extends LuvMotionReality {
 		super.load();
 				
 		cameraGL.setY(1.5);
-		cameraGL.setX(2.6);
+		cameraGL.setZ(3);//Distance in Meters
 		
 		orange = new Sphere(MotionSphere.BALL_RADIUS_TABLE_TENNIS);
-		orange.setX(1);
+		orange.setX(0);
+		orange.setY(1);
+		orange.setZ(1);
 		orange.setColor(orangeColor);
 		
 		blue = new Sphere(MotionSphere.BALL_RADIUS_TABLE_TENNIS);
+		blue.setY(0.5);
+		blue.setX(-0.64);
 		blue.setColor(blueColor);
 		
 		//Load Color Filter based on PipCamera attributes
@@ -77,12 +97,108 @@ public class DualSpheres extends LuvMotionReality {
 		orangeFeature = new Component(w, h);
 		blueFeature = new Component(w, h);
 		
+		orangeTrail = new Trail(10);
+		blueTrail = new Trail(10);
+				
+		registeredKeys = new HashSet<Integer>();
+		keyStates = new HashMap<Integer, Boolean>();
+		
+		registerKey(KeyEvent.TSK_W);
+		registerKey(KeyEvent.TSK_S);
+		registerKey(KeyEvent.TSK_D);
+		registerKey(KeyEvent.TSK_A);
+		registerKey(KeyEvent.TSK_Q);
+		registerKey(KeyEvent.TSK_E);
+		registerKey(KeyEvent.TSK_M);
+		registerKey(KeyEvent.TSK_N);
+		registerKey(KeyEvent.TSK_CTRL_LEFT);
+		registerKey(KeyEvent.TSK_CTRL_RIGHT);
+		registerKey(KeyEvent.TSK_UP_ARROW);
+		registerKey(KeyEvent.TSK_DOWN_ARROW);
+		registerKey(KeyEvent.TSK_LEFT_ARROW);
+		registerKey(KeyEvent.TSK_RIGHT_ARROW);
+		
 		updateAtFixedRate(50);
 	}
 		
 	@Override
 	public void timeUpdate(long now) {
 		needReset = true;
+		
+		orangeTrail.add(orange);
+		//blueTrail.add(blue);
+		
+		//Move Camera
+		if(isPressed(KeyEvent.TSK_CTRL_DIREITA)||isPressed(KeyEvent.TSK_CTRL_ESQUERDA)) {
+					
+			if(isPressed(KeyEvent.TSK_D)) {
+				scene.setOffsetX(+offset);
+			} else if(isPressed(KeyEvent.TSK_A)) {
+				scene.setOffsetX(-offset);
+			}
+			
+			if(isPressed(KeyEvent.TSK_W)) {
+				scene.setOffsetZ(+offset);
+			} else if(isPressed(KeyEvent.TSK_S)) {
+				scene.setOffsetZ(-offset);
+			}
+			
+			if(isPressed(KeyEvent.TSK_Q)) {
+				scene.setOffsetY(+offset);
+			} else if(isPressed(KeyEvent.TSK_E)) {
+				scene.setOffsetY(-offset);
+			}
+			
+			if(isPressed(KeyEvent.TSK_UP_ARROW)) {
+				scene.setOffsetAngleX(+turnSpeed);
+			} else if(isPressed(KeyEvent.TSK_DOWN_ARROW)) {
+				scene.setOffsetAngleX(-turnSpeed);
+			}
+
+			if(isPressed(KeyEvent.TSK_LEFT_ARROW)) {
+				scene.setOffsetAngleY(+turnSpeed);
+			} else if(isPressed(KeyEvent.TSK_RIGHT_ARROW)) {
+				scene.setOffsetAngleY(-turnSpeed);
+			}
+
+			if(isPressed(KeyEvent.TSK_M)) {
+				scene.setOffsetAngleZ(-turnSpeed);
+			} else if(isPressed(KeyEvent.TSK_N)) {
+				scene.setOffsetAngleZ(+turnSpeed);
+			}
+			
+		} else {
+			if(isPressed(KeyEvent.TSK_DOWN_ARROW)) {
+				orange.setOffsetZ(+offsetBall);
+			} else if(isPressed(KeyEvent.TSK_UP_ARROW)) {
+				orange.setOffsetZ(-offsetBall);
+			}
+			
+			if(isPressed(KeyEvent.TSK_LEFT_ARROW)) {
+				orange.setOffsetX(-offsetBall);
+			} else if(isPressed(KeyEvent.TSK_RIGHT_ARROW)) {
+				orange.setOffsetX(+offsetBall);
+			}
+			
+			//Blue Commands
+			if(isPressed(KeyEvent.TSK_S)) {
+				blue.setOffsetZ(+offsetBall);
+			} else if(isPressed(KeyEvent.TSK_W)) {
+				blue.setOffsetZ(-offsetBall);
+			}
+			
+			if(isPressed(KeyEvent.TSK_A)) {
+				blue.setOffsetX(-offsetBall);
+			} else if(isPressed(KeyEvent.TSK_D)) {
+				blue.setOffsetX(+offsetBall);
+			}
+			
+			if(isPressed(KeyEvent.TSK_Q)) {
+				blue.setOffsetY(-offsetBall);
+			} else if(isPressed(KeyEvent.TSK_E)) {
+				blue.setOffsetY(+offsetBall);
+			}
+		}
 	}
 	
 	@Override
@@ -102,7 +218,6 @@ public class DualSpheres extends LuvMotionReality {
 		g.drawRect(strokeSize, strokeSize, w-strokeSize*2, h-strokeSize*2);
 
 		return image;
-
 	}
 
 	@Override
@@ -130,36 +245,6 @@ public class DualSpheres extends LuvMotionReality {
 	@Override
 	public GUIEvent updateKeyboard(KeyEvent event) {
 
-		if(event.isKeyDown(KeyEvent.TSK_D)) {
-			scene.setOffsetX(+offset);
-		} else if(event.isKeyDown(KeyEvent.TSK_A)) {
-			scene.setOffsetX(-offset);
-		}
-
-		if(event.isKeyDown(KeyEvent.TSK_W)) {
-			scene.setOffsetY(+offset);
-		} else if(event.isKeyDown(KeyEvent.TSK_S)) {
-			scene.setOffsetY(-offset);
-		}
-
-		if(event.isKeyDown(KeyEvent.TSK_Q)) {
-			scene.setOffsetZ(+offset);
-		} else if(event.isKeyDown(KeyEvent.TSK_E)) {
-			scene.setOffsetZ(-offset);
-		}
-
-		if(event.isKeyDown(KeyEvent.TSK_UP_ARROW)) {
-			scene.setOffsetAngleX(+5);
-		} else if(event.isKeyDown(KeyEvent.TSK_DOWN_ARROW)) {
-			scene.setOffsetAngleX(-5);
-		}
-
-		if(event.isKeyDown(KeyEvent.TSK_LEFT_ARROW)) {
-			scene.setOffsetAngleY(+5);
-		} else if(event.isKeyDown(KeyEvent.TSK_RIGHT_ARROW)) {
-			scene.setOffsetAngleY(-5);
-		}
-
 		if(event.isKeyDown(KeyEvent.TSK_M)) {
 			scene.setOffsetAngleZ(-5);
 		} else if(event.isKeyDown(KeyEvent.TSK_N)) {
@@ -172,7 +257,24 @@ public class DualSpheres extends LuvMotionReality {
 			cameraGL.setOffsetY(+0.5);
 		}
 		
+		for(Integer key: registeredKeys) {
+			if(event.isKeyDown(key)) {
+				keyStates.put(key, true);
+			} else if(event.isKeyUp(key)) {
+				keyStates.put(key, false);
+			}
+		}
+		
 		return GUIEvent.NONE;
+	}
+	
+	protected void registerKey(int keyCode) {
+		registeredKeys.add(keyCode);
+		keyStates.put(keyCode, false);
+	}
+	
+	protected boolean isPressed(int keyCode) {
+		return keyStates.get(keyCode);
 	}
 
 	public GUIEvent updateMouse(PointerEvent event) {
@@ -230,8 +332,9 @@ public class DualSpheres extends LuvMotionReality {
 		
 		updatePipCamera();
 		
-		if(needReset)
+		if(needReset) {
 			reset(pipCamera.getBuffer());
+		}
 	}
 	
 	private void reset(BufferedImage buffer) {
@@ -255,6 +358,10 @@ public class DualSpheres extends LuvMotionReality {
 		drawFeature(g, orangeFeature);
 		drawFeature(g, blueFeature);
 		
+		int orangeRadius = (orangeFeature.getW()+orangeFeature.getH())/4;
+		//Draw Sphere Info
+		g.drawStringShadow(orangeFeature.getX(),orangeFeature.getY()-windowHeight, orangeFeature.getW(), orangeFeature.getH(), Integer.toString(orangeRadius));
+		
 		//Draw Info
 		g.setColor(Color.WHITE);
 		g.setShadowColor(Color.BLACK);
@@ -267,6 +374,7 @@ public class DualSpheres extends LuvMotionReality {
 		g.drawShadow(20,140, "DistanceZ: "+(cameraGL.getZ()+scene.getZ()));
 		
 		drawCoordinates(g, cameraGL);
+		
 	}
 
 	protected void drawFeature(Graphic g, Component component) {
