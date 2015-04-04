@@ -16,6 +16,7 @@ import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 import br.com.abby.linear.Point3D;
+import br.com.etyllica.context.IntervalUpdate;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.event.PointerEvent;
@@ -29,7 +30,7 @@ import br.com.luvia.geom.Sphere;
 import br.com.luvmotion.ar.LuvMotionReality;
 import br.com.luvmotion.model.Trail;
 
-public class DualSpheres extends LuvMotionReality {
+public class DualSpheres extends LuvMotionReality implements IntervalUpdate {
 
 	int windowHeight = 40;
 	
@@ -118,7 +119,7 @@ public class DualSpheres extends LuvMotionReality {
 		registerKey(KeyEvent.TSK_LEFT_ARROW);
 		registerKey(KeyEvent.TSK_RIGHT_ARROW);
 		
-		updateAtFixedRate(50);
+		updateAtFixedRate(50, this);
 	}
 		
 	@Override
