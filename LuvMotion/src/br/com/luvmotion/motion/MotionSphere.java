@@ -221,8 +221,8 @@ public class MotionSphere extends LuvMotionReality {
 				
 		scene.updateScene(gl);
 		
-		sphere.draw(gl, glu);
-		origin.draw(gl, glu);
+		sphere.draw(drawable);
+		origin.draw(drawable);
 		
 		drawFloor(gl);
 		
@@ -239,7 +239,7 @@ public class MotionSphere extends LuvMotionReality {
 	
 	private void reset(BufferedImage buffer) {
 		
-		Component screen = new Component(buffer.getWidth(), buffer.getHeight());
+	  Component screen = new Component(buffer.getWidth(), buffer.getHeight());
 		
 		feature = filter.filterFirst(buffer, screen);
 	}
