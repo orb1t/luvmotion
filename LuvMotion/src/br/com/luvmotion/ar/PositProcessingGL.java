@@ -15,7 +15,7 @@ import br.com.etyllica.motion.core.helper.RotationAxis;
 import br.com.etyllica.motion.core.features.Component;
 import br.com.etyllica.motion.filter.color.ColorStrategy;
 import br.com.etyllica.motion.filter.search.FloodFillSearch;
-import br.com.etyllica.motion.filter.validation.MaxComponentDimension;
+import br.com.etyllica.motion.filter.validation.MaxDensityValidation;
 import br.com.etyllica.motion.math.interpolation.QuadraticInterpolator;
 import br.com.etyllica.motion.modifier.PositCoplanarModifier;
 import br.com.etyllica.motion.modifier.hull.HullModifier;
@@ -70,7 +70,7 @@ public class PositProcessingGL extends LuvMotionReality {
 		positModifier = new PositCoplanarModifier(width, height);
 		
 		cornerFilter = new FloodFillSearch(width, height);
-		cornerFilter.addValidation(new MaxComponentDimension(w));
+		cornerFilter.addValidation(new MaxDensityValidation(w));
 		
 		cornerFilter.setBorder(10);
 		
