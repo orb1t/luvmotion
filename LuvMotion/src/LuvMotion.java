@@ -29,13 +29,13 @@ public class LuvMotion extends Luvia {
 		//Augmented Reality Examples
 		//return new LuvMotionReality(w, h);
 		//return new ImageProcessingGL(w, h);
-		//return new PositProcessingGL(w, h);
+		return new PositProcessingGL(w, h);
 		//return new PositExample(w, h);
 
 		//Motion Examples
 		//return new MotionSphere(w, h);
 		//return new DualSpheres(w, h);
-		return new DualMotionSpheres(w, h);
+		//return new DualMotionSpheres(w, h);
 		
 	}
 

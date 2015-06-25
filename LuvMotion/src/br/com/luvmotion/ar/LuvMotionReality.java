@@ -167,8 +167,30 @@ public class LuvMotionReality extends ApplicationGL {
 
 	}	
 
-	private double offset = 0.5; 
-
+	private double offset = 0.5;
+	private double offsetTurn = 0.5;
+	
+	private boolean turnUp = false;
+	private boolean turnDown = false;
+	private boolean turnLeft = false;
+	private boolean turnRight = false;
+	
+	@Override
+	public void update(long now) {
+		if(turnUp) {
+			scene.setOffsetAngleX(+offsetTurn);
+		}
+		if(turnDown) {
+			scene.setOffsetAngleX(-offsetTurn);
+		}
+		if(turnLeft) {
+			scene.setOffsetAngleY(+offsetTurn);
+		}
+		if(turnRight) {
+			scene.setOffsetAngleY(-offsetTurn);
+		}
+	}
+	
 	@Override
 	public GUIEvent updateKeyboard(KeyEvent event) {
 
@@ -191,15 +213,27 @@ public class LuvMotionReality extends ApplicationGL {
 		}
 
 		if(event.isKeyDown(KeyEvent.TSK_UP_ARROW)) {
-			scene.setOffsetAngleX(+5);
-		} else if(event.isKeyDown(KeyEvent.TSK_DOWN_ARROW)) {
-			scene.setOffsetAngleX(-5);
+			turnUp = true;
+		} else if(event.isKeyUp(KeyEvent.TSK_UP_ARROW)) {
+			turnUp = false;
 		}
-
+		
+		if(event.isKeyDown(KeyEvent.TSK_DOWN_ARROW)) {
+			turnDown = true;
+		} else if(event.isKeyUp(KeyEvent.TSK_DOWN_ARROW)) {
+			turnDown = false;
+		}
+		
 		if(event.isKeyDown(KeyEvent.TSK_LEFT_ARROW)) {
-			scene.setOffsetAngleY(+5);
-		} else if(event.isKeyDown(KeyEvent.TSK_RIGHT_ARROW)) {
-			scene.setOffsetAngleY(-5);
+			turnLeft = true;
+		} else if(event.isKeyUp(KeyEvent.TSK_LEFT_ARROW)) {
+			turnLeft = false;
+		}
+		
+		if(event.isKeyDown(KeyEvent.TSK_RIGHT_ARROW)) {
+			turnRight = true;
+		} else if(event.isKeyUp(KeyEvent.TSK_RIGHT_ARROW)) {
+			turnRight = false;
 		}
 
 		if(event.isKeyDown(KeyEvent.TSK_M)) {
