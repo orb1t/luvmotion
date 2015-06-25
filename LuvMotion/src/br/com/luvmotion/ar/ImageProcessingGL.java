@@ -3,13 +3,11 @@ package br.com.luvmotion.ar;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
-import javax.media.opengl.GL2;
-
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.graphics.Graphic;
 import br.com.etyllica.linear.Point2D;
-import br.com.etyllica.motion.core.features.Component;
+import br.com.etyllica.motion.feature.Component;
 import br.com.etyllica.motion.filter.color.ColorStrategy;
 import br.com.etyllica.motion.filter.search.FloodFillSearch;
 import br.com.etyllica.motion.modifier.PositCoplanarModifier;
@@ -102,7 +100,7 @@ public class ImageProcessingGL extends LuvMotionReality {
 				drawable.drawSphere(1,0,0,0);
 			}else{
 				//drawable.drawCube();
-				drawable.drawPyramid();
+				drawable.drawPyramid(1);
 			}
 			
 			if(feature!=null){
@@ -121,7 +119,7 @@ public class ImageProcessingGL extends LuvMotionReality {
 
 		loadingInfo = "Start Filter";
 
-		feature = cornerFilter.filterFirst(b, new Component(b.getWidth(), b.getHeight()));
+		feature = cornerFilter.filterFirst(b, new Component(0,0,b.getWidth(), b.getHeight()));
 
 		positModifier.modifyComponent(feature);
 		

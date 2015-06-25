@@ -13,7 +13,6 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
-import br.com.abby.linear.Point3D;
 import br.com.etyllica.context.UpdateIntervalListener;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
@@ -21,8 +20,9 @@ import br.com.etyllica.core.event.PointerEvent;
 import br.com.etyllica.core.graphics.Graphic;
 import br.com.etyllica.core.graphics.SVGColor;
 import br.com.etyllica.core.input.mouse.MouseButton;
-import br.com.etyllica.motion.core.features.Component;
-import br.com.etyllica.motion.features.trail.TripleAxisTrail;
+import br.com.etyllica.linear.Point3D;
+import br.com.etyllica.motion.feature.Component;
+import br.com.etyllica.motion.feature.trail.TripleAxisTrail;
 import br.com.etyllica.motion.filter.ColorFilter;
 import br.com.luvia.core.video.Graphics3D;
 import br.com.luvia.geom.Sphere;
@@ -133,71 +133,71 @@ public class DualSpheres extends LuvMotionReality implements UpdateIntervalListe
 		if(isPressed(KeyEvent.TSK_CTRL_DIREITA)||isPressed(KeyEvent.TSK_CTRL_ESQUERDA)) {
 
 			if(isPressed(KeyEvent.TSK_D)) {
-				scene.setOffsetX(+offset);
+				scene.offsetX(+offset);
 			} else if(isPressed(KeyEvent.TSK_A)) {
-				scene.setOffsetX(-offset);
+				scene.offsetX(-offset);
 			}
 
 			if(isPressed(KeyEvent.TSK_W)) {
-				scene.setOffsetZ(+offset);
+				scene.offsetZ(+offset);
 			} else if(isPressed(KeyEvent.TSK_S)) {
-				scene.setOffsetZ(-offset);
+				scene.offsetZ(-offset);
 			}
 
 			if(isPressed(KeyEvent.TSK_Q)) {
-				scene.setOffsetY(+offset);
+				scene.offsetY(+offset);
 			} else if(isPressed(KeyEvent.TSK_E)) {
-				scene.setOffsetY(-offset);
+				scene.offsetY(-offset);
 			}
 
 			if(isPressed(KeyEvent.TSK_UP_ARROW)) {
-				scene.setOffsetAngleX(+turnSpeed);
+				scene.offsetAngleX(+turnSpeed);
 			} else if(isPressed(KeyEvent.TSK_DOWN_ARROW)) {
-				scene.setOffsetAngleX(-turnSpeed);
+				scene.offsetAngleX(-turnSpeed);
 			}
 
 			if(isPressed(KeyEvent.TSK_LEFT_ARROW)) {
-				scene.setOffsetAngleY(+turnSpeed);
+				scene.offsetAngleY(+turnSpeed);
 			} else if(isPressed(KeyEvent.TSK_RIGHT_ARROW)) {
-				scene.setOffsetAngleY(-turnSpeed);
+				scene.offsetAngleY(-turnSpeed);
 			}
 
 			if(isPressed(KeyEvent.TSK_M)) {
-				scene.setOffsetAngleZ(-turnSpeed);
+				scene.offsetAngleZ(-turnSpeed);
 			} else if(isPressed(KeyEvent.TSK_N)) {
-				scene.setOffsetAngleZ(+turnSpeed);
+				scene.offsetAngleZ(+turnSpeed);
 			}
 
 		} else {
 			if(isPressed(KeyEvent.TSK_DOWN_ARROW)) {
-				orange.setOffsetZ(+offsetBall);
+				orange.offsetZ(+offsetBall);
 			} else if(isPressed(KeyEvent.TSK_UP_ARROW)) {
-				orange.setOffsetZ(-offsetBall);
+				orange.offsetZ(-offsetBall);
 			}
 
 			if(isPressed(KeyEvent.TSK_LEFT_ARROW)) {
-				orange.setOffsetX(-offsetBall);
+				orange.offsetX(-offsetBall);
 			} else if(isPressed(KeyEvent.TSK_RIGHT_ARROW)) {
-				orange.setOffsetX(+offsetBall);
+				orange.offsetX(+offsetBall);
 			}
 
 			//Blue Commands
 			if(isPressed(KeyEvent.TSK_S)) {
-				blue.setOffsetZ(+offsetBall);
+				blue.offsetZ(+offsetBall);
 			} else if(isPressed(KeyEvent.TSK_W)) {
-				blue.setOffsetZ(-offsetBall);
+				blue.offsetZ(-offsetBall);
 			}
 
 			if(isPressed(KeyEvent.TSK_A)) {
-				blue.setOffsetX(-offsetBall);
+				blue.offsetX(-offsetBall);
 			} else if(isPressed(KeyEvent.TSK_D)) {
-				blue.setOffsetX(+offsetBall);
+				blue.offsetX(+offsetBall);
 			}
 
 			if(isPressed(KeyEvent.TSK_Q)) {
-				blue.setOffsetY(-offsetBall);
+				blue.offsetY(-offsetBall);
 			} else if(isPressed(KeyEvent.TSK_E)) {
-				blue.setOffsetY(+offsetBall);
+				blue.offsetY(+offsetBall);
 			}
 		}
 	}
@@ -247,15 +247,15 @@ public class DualSpheres extends LuvMotionReality implements UpdateIntervalListe
 	public GUIEvent updateKeyboard(KeyEvent event) {
 
 		if(event.isKeyDown(KeyEvent.TSK_M)) {
-			scene.setOffsetAngleZ(-5);
+			scene.offsetAngleZ(-5);
 		} else if(event.isKeyDown(KeyEvent.TSK_N)) {
-			scene.setOffsetAngleZ(+5);
+			scene.offsetAngleZ(+5);
 		}
 
 		if(event.isKeyDown(KeyEvent.TSK_Z)) {
-			cameraGL.setOffsetY(-0.5);
+			cameraGL.offsetY(-0.5);
 		} else if(event.isKeyDown(KeyEvent.TSK_X)) {
-			cameraGL.setOffsetY(+0.5);
+			cameraGL.offsetY(+0.5);
 		}
 
 		for(Integer key: registeredKeys) {

@@ -12,9 +12,10 @@ import br.com.etyllica.core.graphics.Graphic;
 import br.com.etyllica.linear.Point2D;
 import br.com.etyllica.linear.Point3D;
 import br.com.etyllica.motion.core.helper.RotationAxis;
-import br.com.etyllica.motion.core.features.Component;
+import br.com.etyllica.motion.feature.Component;
 import br.com.etyllica.motion.filter.color.ColorStrategy;
 import br.com.etyllica.motion.filter.search.FloodFillSearch;
+import br.com.etyllica.motion.filter.search.SoftFloodFillSearch;
 import br.com.etyllica.motion.filter.validation.MaxDensityValidation;
 import br.com.etyllica.motion.math.interpolation.QuadraticInterpolator;
 import br.com.etyllica.motion.modifier.PositCoplanarModifier;
@@ -67,15 +68,15 @@ public class PositProcessingGL extends LuvMotionReality {
 		
 		colorStrategy.setTolerance(0x30);
 		
-		positModifier = new PositCoplanarModifier(width, height);
+		double focalLength = w/2;
 		
-		cornerFilter = new FloodFillSearch(width, height);
+		positModifier = new PositCoplanarModifier(width, height, focalLength);
+		
+		cornerFilter = new SoftFloodFillSearch(width, height);
 		cornerFilter.addValidation(new MaxDensityValidation(w));
 		
-		cornerFilter.setBorder(10);
-		
+		cornerFilter.setBorder(10);		
 		cornerFilter.setStep(1);
-
 		cornerFilter.setPixelStrategy(colorStrategy);
 
 		//hullModifier = new AugmentedMarkerModifier();
@@ -84,7 +85,6 @@ public class PositProcessingGL extends LuvMotionReality {
 		cornerFilter.setComponentModifierStrategy(hullModifier);
 
 		feature = new Component(0, 0, w, h);
-
 	}
 
 	@Override
@@ -112,9 +112,7 @@ public class PositProcessingGL extends LuvMotionReality {
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 		gl.glClearColor(1f, 1f, 1f, 1);
 				
-		//gl.glPopMatrix();
-				
-		if(feature.getPoints().size()>3) {
+		if(feature.getPoints().size() > 3) {
 
 			resetScene(drawable);
 						
@@ -123,9 +121,11 @@ public class PositProcessingGL extends LuvMotionReality {
 			double ry = axis.getRotationY();
 			double rz = axis.getRotationZ();
 			
+			double size = 1;
+			
 			gl.glPushMatrix();
 
-			gl.glTranslated(axis.getX(), -axis.getY(), -axis.getZ());
+			gl.glTranslated(axis.getX(), -axis.getY()-0.5, -axis.getZ());
 			gl.glRotated(angle, rx, ry, rz);
 			
 			//
@@ -137,12 +137,16 @@ public class PositProcessingGL extends LuvMotionReality {
 				
 				//Flip Y Axis
 				//gl.glScalef(1.f, -1.f, 1.f);
+				//gl.glTranslated(0, +0.5, 0);
 				
 				if(drawSphere) {
 					drawable.drawSphere(1, 0, 0, 0);
-				}else{
+				} else {
+					drawable.setColor(Color.BLACK);
+					drawable.drawWireCube(size);
+					drawable.setColor(Color.CYAN);
 					drawable.drawCube();
-					//drawPyramid(gl);
+					//drawable.drawPyramid(1);
 				}
 				
 			}
@@ -160,7 +164,7 @@ public class PositProcessingGL extends LuvMotionReality {
 			point = axis.transformPoint(axisMarker);
 						
 			drawable.drawSphere(0.5, point.getX(), point.getY(), point.getZ());
-						
+			
 		}
 					
 		calculate(pipCamera.getBuffer());
@@ -212,7 +216,7 @@ public class PositProcessingGL extends LuvMotionReality {
 
 		loadingInfo = "Start Filter";
 
-		feature = cornerFilter.filterFirst(b, new Component(0, 0, b.getWidth(), b.getHeight()));
+		feature = cornerFilter.filterFirst(b, new Component(0, 0, b.getWidth()-1, b.getHeight()-1));
 		
 		axis = positModifier.modify(feature);
 		
