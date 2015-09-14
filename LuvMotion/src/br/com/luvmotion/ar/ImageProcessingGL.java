@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.graphics.Graphic;
-import br.com.etyllica.linear.Point2D;
+import br.com.etyllica.core.linear.Point2D;
 import br.com.etyllica.motion.feature.Component;
 import br.com.etyllica.motion.filter.color.ColorStrategy;
 import br.com.etyllica.motion.filter.search.FloodFillSearch;
@@ -77,7 +77,7 @@ public class ImageProcessingGL extends LuvMotionReality {
 	public GUIEvent updateKeyboard(KeyEvent event) {
 		super.updateKeyboard(event);
 
-		if(event.isKeyDown(KeyEvent.TSK_SPACE)){
+		if(event.isKeyDown(KeyEvent.VK_SPACE)){
 			drawSphere = !drawSphere;
 		}
 		
@@ -150,7 +150,7 @@ public class ImageProcessingGL extends LuvMotionReality {
 
 				g.setColor(Color.BLUE);
 
-				for(Point2D ponto: feature.getPoints()){
+				for (Point2D ponto: feature.getPoints()) {
 					g.fillCircle(xOffset+(int)ponto.getX(), yOffset+(int)ponto.getY(), 5);
 				}
 

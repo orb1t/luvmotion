@@ -9,13 +9,13 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
-import br.com.abby.linear.Point3D;
+import br.com.etyllica.awt.SVGColor;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
+import br.com.etyllica.core.event.MouseButton;
 import br.com.etyllica.core.event.PointerEvent;
 import br.com.etyllica.core.graphics.Graphic;
-import br.com.etyllica.core.graphics.SVGColor;
-import br.com.etyllica.core.input.mouse.MouseButton;
+import br.com.etyllica.core.linear.Point3D;
 import br.com.etyllica.motion.feature.Component;
 import br.com.etyllica.motion.filter.ColorFilter;
 import br.com.luvia.core.video.Graphics3D;
@@ -134,46 +134,46 @@ public class MotionSphere extends LuvMotionReality {
 	@Override
 	public GUIEvent updateKeyboard(KeyEvent event) {
 
-		if(event.isKeyDown(KeyEvent.TSK_D)) {
-			scene.setOffsetX(+offset);
-		} else if(event.isKeyDown(KeyEvent.TSK_A)) {
-			scene.setOffsetX(-offset);
+		if(event.isKeyDown(KeyEvent.VK_D)) {
+			scene.offsetX(+offset);
+		} else if(event.isKeyDown(KeyEvent.VK_A)) {
+			scene.offsetX(-offset);
 		}
 
-		if(event.isKeyDown(KeyEvent.TSK_W)) {
-			scene.setOffsetY(+offset);
-		} else if(event.isKeyDown(KeyEvent.TSK_S)) {
-			scene.setOffsetY(-offset);
+		if(event.isKeyDown(KeyEvent.VK_W)) {
+			scene.offsetY(+offset);
+		} else if(event.isKeyDown(KeyEvent.VK_S)) {
+			scene.offsetY(-offset);
 		}
 
-		if(event.isKeyDown(KeyEvent.TSK_Q)) {
-			scene.setOffsetZ(+offset);
-		} else if(event.isKeyDown(KeyEvent.TSK_E)) {
-			scene.setOffsetZ(-offset);
+		if(event.isKeyDown(KeyEvent.VK_Q)) {
+			scene.offsetZ(+offset);
+		} else if(event.isKeyDown(KeyEvent.VK_E)) {
+			scene.offsetZ(-offset);
 		}
 
-		if(event.isKeyDown(KeyEvent.TSK_UP_ARROW)) {
-			scene.setOffsetAngleX(+5);
-		} else if(event.isKeyDown(KeyEvent.TSK_DOWN_ARROW)) {
-			scene.setOffsetAngleX(-5);
+		if(event.isKeyDown(KeyEvent.VK_UP_ARROW)) {
+			scene.offsetAngleX(+5);
+		} else if(event.isKeyDown(KeyEvent.VK_DOWN_ARROW)) {
+			scene.offsetAngleX(-5);
 		}
 
-		if(event.isKeyDown(KeyEvent.TSK_LEFT_ARROW)) {
-			scene.setOffsetAngleY(+5);
-		} else if(event.isKeyDown(KeyEvent.TSK_RIGHT_ARROW)) {
-			scene.setOffsetAngleY(-5);
+		if(event.isKeyDown(KeyEvent.VK_LEFT_ARROW)) {
+			scene.offsetAngleY(+5);
+		} else if(event.isKeyDown(KeyEvent.VK_RIGHT_ARROW)) {
+			scene.offsetAngleY(-5);
 		}
 
-		if(event.isKeyDown(KeyEvent.TSK_M)) {
-			scene.setOffsetAngleZ(-5);
-		} else if(event.isKeyDown(KeyEvent.TSK_N)) {
-			scene.setOffsetAngleZ(+5);
+		if(event.isKeyDown(KeyEvent.VK_M)) {
+			scene.offsetAngleZ(-5);
+		} else if(event.isKeyDown(KeyEvent.VK_N)) {
+			scene.offsetAngleZ(+5);
 		}
 		
-		if(event.isKeyDown(KeyEvent.TSK_Z)) {
-			cameraGL.setOffsetY(-0.5);
-		} else if(event.isKeyDown(KeyEvent.TSK_X)) {
-			cameraGL.setOffsetY(+0.5);
+		if(event.isKeyDown(KeyEvent.VK_Z)) {
+			cameraGL.offsetY(-0.5);
+		} else if(event.isKeyDown(KeyEvent.VK_X)) {
+			cameraGL.offsetY(+0.5);
 		}
 		
 		return GUIEvent.NONE;

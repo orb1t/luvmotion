@@ -9,8 +9,8 @@ import javax.media.opengl.GL2;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.graphics.Graphic;
-import br.com.etyllica.linear.Point2D;
-import br.com.etyllica.linear.Point3D;
+import br.com.etyllica.core.linear.Point2D;
+import br.com.etyllica.core.linear.Point3D;
 import br.com.etyllica.motion.core.helper.RotationAxis;
 import br.com.etyllica.motion.feature.Component;
 import br.com.etyllica.motion.filter.color.ColorStrategy;
@@ -20,7 +20,7 @@ import br.com.etyllica.motion.filter.validation.MaxDensityValidation;
 import br.com.etyllica.motion.math.interpolation.QuadraticInterpolator;
 import br.com.etyllica.motion.modifier.PositCoplanarModifier;
 import br.com.etyllica.motion.modifier.hull.HullModifier;
-import br.com.etyllica.motion.modifier.hull.RectangularOGRModifier;
+import br.com.etyllica.motion.modifier.ogr.RectangularOGRModifier;
 import br.com.luvia.core.video.Graphics3D;
 
 public class PositProcessingGL extends LuvMotionReality {
@@ -91,7 +91,7 @@ public class PositProcessingGL extends LuvMotionReality {
 	public GUIEvent updateKeyboard(KeyEvent event) {
 		super.updateKeyboard(event);
 
-		if(event.isKeyDown(KeyEvent.TSK_SPACE)) {
+		if(event.isKeyDown(KeyEvent.VK_SPACE)) {
 			drawSphere = !drawSphere;
 		}
 		

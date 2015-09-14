@@ -16,12 +16,12 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
-import br.com.abby.util.CameraGL;
+import br.com.abby.linear.Camera3D;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
+import br.com.etyllica.core.event.MouseButton;
 import br.com.etyllica.core.event.PointerEvent;
 import br.com.etyllica.core.graphics.Graphic;
-import br.com.etyllica.core.input.mouse.MouseButton;
 import br.com.luvia.core.context.ApplicationGL;
 import br.com.luvia.core.video.Graphics3D;
 import br.com.luvia.loader.TextureLoader;
@@ -36,7 +36,7 @@ public class LuvMotionReality extends ApplicationGL {
 	//Scene Stuff
 	private Texture marker;
 
-	protected CameraGL cameraGL;
+	protected Camera3D cameraGL;
 
 	protected float mx = 0;
 
@@ -72,7 +72,7 @@ public class LuvMotionReality extends ApplicationGL {
 	@Override
 	public void load() {
 
-		cameraGL = new CameraGL(0, 0.5, 0.0001);
+		cameraGL = new Camera3D(0, 0.5, 0.0001);
 		
 		BufferedImage image = generateMarkerImage(200, 200);
 
@@ -178,68 +178,68 @@ public class LuvMotionReality extends ApplicationGL {
 	@Override
 	public void update(long now) {
 		if(turnUp) {
-			scene.setOffsetAngleX(+offsetTurn);
+			scene.offsetAngleX(+offsetTurn);
 		}
 		if(turnDown) {
-			scene.setOffsetAngleX(-offsetTurn);
+			scene.offsetAngleX(-offsetTurn);
 		}
 		if(turnLeft) {
-			scene.setOffsetAngleY(+offsetTurn);
+			scene.offsetAngleY(+offsetTurn);
 		}
 		if(turnRight) {
-			scene.setOffsetAngleY(-offsetTurn);
+			scene.offsetAngleY(-offsetTurn);
 		}
 	}
 	
 	@Override
 	public GUIEvent updateKeyboard(KeyEvent event) {
 
-		if(event.isKeyDown(KeyEvent.TSK_D)) {
-			scene.setOffsetX(+offset);
-		} else if(event.isKeyDown(KeyEvent.TSK_A)) {
-			scene.setOffsetX(-offset);
+		if(event.isKeyDown(KeyEvent.VK_D)) {
+			scene.offsetX(+offset);
+		} else if(event.isKeyDown(KeyEvent.VK_A)) {
+			scene.offsetX(-offset);
 		}
 
-		if(event.isKeyDown(KeyEvent.TSK_W)) {
-			scene.setOffsetY(+offset);
-		} else if(event.isKeyDown(KeyEvent.TSK_S)) {
-			scene.setOffsetY(-offset);
+		if(event.isKeyDown(KeyEvent.VK_W)) {
+			scene.offsetY(+offset);
+		} else if(event.isKeyDown(KeyEvent.VK_S)) {
+			scene.offsetY(-offset);
 		}
 
-		if(event.isKeyDown(KeyEvent.TSK_Q)) {
-			scene.setOffsetZ(+offset);
-		} else if(event.isKeyDown(KeyEvent.TSK_E)) {
-			scene.setOffsetZ(-offset);
+		if(event.isKeyDown(KeyEvent.VK_Q)) {
+			scene.offsetZ(+offset);
+		} else if(event.isKeyDown(KeyEvent.VK_E)) {
+			scene.offsetZ(-offset);
 		}
 
-		if(event.isKeyDown(KeyEvent.TSK_UP_ARROW)) {
+		if(event.isKeyDown(KeyEvent.VK_UP_ARROW)) {
 			turnUp = true;
-		} else if(event.isKeyUp(KeyEvent.TSK_UP_ARROW)) {
+		} else if(event.isKeyUp(KeyEvent.VK_UP_ARROW)) {
 			turnUp = false;
 		}
 		
-		if(event.isKeyDown(KeyEvent.TSK_DOWN_ARROW)) {
+		if(event.isKeyDown(KeyEvent.VK_DOWN_ARROW)) {
 			turnDown = true;
-		} else if(event.isKeyUp(KeyEvent.TSK_DOWN_ARROW)) {
+		} else if(event.isKeyUp(KeyEvent.VK_DOWN_ARROW)) {
 			turnDown = false;
 		}
 		
-		if(event.isKeyDown(KeyEvent.TSK_LEFT_ARROW)) {
+		if(event.isKeyDown(KeyEvent.VK_LEFT_ARROW)) {
 			turnLeft = true;
-		} else if(event.isKeyUp(KeyEvent.TSK_LEFT_ARROW)) {
+		} else if(event.isKeyUp(KeyEvent.VK_LEFT_ARROW)) {
 			turnLeft = false;
 		}
 		
-		if(event.isKeyDown(KeyEvent.TSK_RIGHT_ARROW)) {
+		if(event.isKeyDown(KeyEvent.VK_RIGHT_ARROW)) {
 			turnRight = true;
-		} else if(event.isKeyUp(KeyEvent.TSK_RIGHT_ARROW)) {
+		} else if(event.isKeyUp(KeyEvent.VK_RIGHT_ARROW)) {
 			turnRight = false;
 		}
 
-		if(event.isKeyDown(KeyEvent.TSK_M)) {
-			scene.setOffsetAngleZ(-5);
-		} else if(event.isKeyDown(KeyEvent.TSK_N)) {
-			scene.setOffsetAngleZ(+5);
+		if(event.isKeyDown(KeyEvent.VK_M)) {
+			scene.offsetAngleZ(-5);
+		} else if(event.isKeyDown(KeyEvent.VK_N)) {
+			scene.offsetAngleZ(+5);
 		}
 
 		return GUIEvent.NONE;
