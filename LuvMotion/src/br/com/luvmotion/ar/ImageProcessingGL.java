@@ -3,13 +3,12 @@ package br.com.luvmotion.ar;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
-import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
-import br.com.etyllica.core.graphics.Graphic;
+import br.com.etyllica.core.graphics.Graphics;
 import br.com.etyllica.core.linear.Point2D;
 import br.com.etyllica.motion.feature.Component;
 import br.com.etyllica.motion.filter.color.ColorStrategy;
-import br.com.etyllica.motion.filter.search.FloodFillSearch;
+import br.com.etyllica.motion.filter.search.flood.FloodFillSearch;
 import br.com.etyllica.motion.modifier.PositCoplanarModifier;
 import br.com.etyllica.motion.modifier.hull.AugmentedMarkerModifier;
 import br.com.luvia.core.video.Graphics3D;
@@ -74,14 +73,12 @@ public class ImageProcessingGL extends LuvMotionReality {
 	}
 
 	@Override
-	public GUIEvent updateKeyboard(KeyEvent event) {
+	public void updateKeyboard(KeyEvent event) {
 		super.updateKeyboard(event);
 
 		if(event.isKeyDown(KeyEvent.VK_SPACE)){
 			drawSphere = !drawSphere;
 		}
-		
-		return GUIEvent.NONE;
 
 	}
 
@@ -131,7 +128,7 @@ public class ImageProcessingGL extends LuvMotionReality {
 	}
 
 	@Override
-	public void draw(Graphic g) {
+	public void draw(Graphics g) {
 
 		//Title Window Bar = 36 pixels
 		int translateOffset = 36;
@@ -167,7 +164,7 @@ public class ImageProcessingGL extends LuvMotionReality {
 
 	}
 	
-	private void drawFilterData(Graphic g){
+	private void drawFilterData(Graphics g){
 		
 		drawBox(g, feature);
 
@@ -208,7 +205,7 @@ public class ImageProcessingGL extends LuvMotionReality {
 		
 	}
 
-	private void drawBox(Graphic g, Component box){
+	private void drawBox(Graphics g, Component box){
 
 		g.setColor(Color.RED);
 
@@ -257,15 +254,15 @@ public class ImageProcessingGL extends LuvMotionReality {
 
 	}
 
-	private void drawLine(Graphic g, Point2D a, Point2D b) {		
+	private void drawLine(Graphics g, Point2D a, Point2D b) {		
 		g.drawLine(xOffset+(int)a.getX(), yOffset+(int)a.getY(), xOffset+(int)b.getX(), yOffset+(int)b.getY());		
 	}
 
-	private void drawPoint(Graphic g, Point2D point) {
+	private void drawPoint(Graphics g, Point2D point) {
 		g.fillCircle(xOffset+(int)point.getX(), yOffset+(int)point.getY(), 3);
 	}
 
-	private void drawSceneData(Graphic g) {
+	private void drawSceneData(Graphics g) {
 
 		g.setColor(Color.WHITE);
 

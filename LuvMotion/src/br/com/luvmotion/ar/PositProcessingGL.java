@@ -6,16 +6,15 @@ import java.awt.image.BufferedImage;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
-import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
-import br.com.etyllica.core.graphics.Graphic;
+import br.com.etyllica.core.graphics.Graphics;
 import br.com.etyllica.core.linear.Point2D;
 import br.com.etyllica.core.linear.Point3D;
 import br.com.etyllica.motion.core.helper.RotationAxis;
 import br.com.etyllica.motion.feature.Component;
 import br.com.etyllica.motion.filter.color.ColorStrategy;
-import br.com.etyllica.motion.filter.search.FloodFillSearch;
-import br.com.etyllica.motion.filter.search.SoftFloodFillSearch;
+import br.com.etyllica.motion.filter.search.flood.FloodFillSearch;
+import br.com.etyllica.motion.filter.search.flood.SoftFloodFillSearch;
 import br.com.etyllica.motion.filter.validation.MaxDensityValidation;
 import br.com.etyllica.motion.math.interpolation.QuadraticInterpolator;
 import br.com.etyllica.motion.modifier.PositCoplanarModifier;
@@ -88,15 +87,13 @@ public class PositProcessingGL extends LuvMotionReality {
 	}
 
 	@Override
-	public GUIEvent updateKeyboard(KeyEvent event) {
+	public void updateKeyboard(KeyEvent event) {
 		super.updateKeyboard(event);
 
 		if(event.isKeyDown(KeyEvent.VK_SPACE)) {
 			drawSphere = !drawSphere;
 		}
 		
-		return GUIEvent.NONE;
-
 	}
 	
 	private Point3D point = new Point3D(0, 0, 0);
@@ -228,7 +225,7 @@ public class PositProcessingGL extends LuvMotionReality {
 	}
 
 	@Override
-	public void draw(Graphic g) {
+	public void draw(Graphics g) {
 
 		//Title Window Bar = 36 pixels
 		int translateOffset = 36;
@@ -266,7 +263,7 @@ public class PositProcessingGL extends LuvMotionReality {
 
 	}
 	
-	private void drawFilterData(Graphic g) {
+	private void drawFilterData(Graphics g) {
 		
 		drawBox(g, feature);
 
@@ -313,7 +310,7 @@ public class PositProcessingGL extends LuvMotionReality {
 		//g.drawString("Lateral Distance = "+modifier.getLateralDistance(), 20, textHeight+400);
 	}
 	
-	private void drawRealData(Graphic g) {
+	private void drawRealData(Graphics g) {
 		
 		g.drawString("X = "+scene.getX(), 720, textHeight+250);
 		g.drawString("Y = "+scene.getY(), 720, textHeight+275);
@@ -345,7 +342,7 @@ public class PositProcessingGL extends LuvMotionReality {
 		return interpolator.interpolate(x);	
 	}
 
-	private void drawBox(Graphic g, Component box) {
+	private void drawBox(Graphics g, Component box) {
 
 		g.setColor(Color.RED);
 
@@ -394,15 +391,15 @@ public class PositProcessingGL extends LuvMotionReality {
 
 	}
 
-	private void drawLine(Graphic g, Point2D a, Point2D b) {		
+	private void drawLine(Graphics g, Point2D a, Point2D b) {		
 		g.drawLine(xOffset+(int)a.getX(), yOffset+(int)a.getY(), xOffset+(int)b.getX(), yOffset+(int)b.getY());		
 	}
 
-	private void drawPoint(Graphic g, Point2D point) {
+	private void drawPoint(Graphics g, Point2D point) {
 		g.fillCircle(xOffset+(int)point.getX(), yOffset+(int)point.getY(), 3);
 	}
 
-	private void drawSceneData(Graphic g) {
+	private void drawSceneData(Graphics g) {
 
 		g.setColor(Color.WHITE);
 

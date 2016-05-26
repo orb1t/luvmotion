@@ -16,12 +16,11 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
-import br.com.abby.linear.Camera3D;
-import br.com.etyllica.core.event.GUIEvent;
+import br.com.abby.linear.Camera;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.event.MouseButton;
 import br.com.etyllica.core.event.PointerEvent;
-import br.com.etyllica.core.graphics.Graphic;
+import br.com.etyllica.core.graphics.Graphics;
 import br.com.luvia.core.context.ApplicationGL;
 import br.com.luvia.core.video.Graphics3D;
 import br.com.luvia.loader.TextureLoader;
@@ -36,7 +35,7 @@ public class LuvMotionReality extends ApplicationGL {
 	//Scene Stuff
 	private Texture marker;
 
-	protected Camera3D cameraGL;
+	protected Camera cameraGL;
 
 	protected float mx = 0;
 
@@ -72,7 +71,7 @@ public class LuvMotionReality extends ApplicationGL {
 	@Override
 	public void load() {
 
-		cameraGL = new Camera3D(0, 0.5, 0.0001);
+		cameraGL = new Camera(0, 0.5, 0.0001);
 		
 		BufferedImage image = generateMarkerImage(200, 200);
 
@@ -192,7 +191,7 @@ public class LuvMotionReality extends ApplicationGL {
 	}
 	
 	@Override
-	public GUIEvent updateKeyboard(KeyEvent event) {
+	public void updateKeyboard(KeyEvent event) {
 
 		if(event.isKeyDown(KeyEvent.VK_D)) {
 			scene.offsetX(+offset);
@@ -242,10 +241,9 @@ public class LuvMotionReality extends ApplicationGL {
 			scene.offsetAngleZ(+5);
 		}
 
-		return GUIEvent.NONE;
 	}
 
-	public GUIEvent updateMouse(PointerEvent event) {
+	public void updateMouse(PointerEvent event) {
 
 		mx = event.getX();
 		my = event.getY();
@@ -260,7 +258,6 @@ public class LuvMotionReality extends ApplicationGL {
 			click = false;
 		}
 
-		return GUIEvent.NONE;
 	}
 
 	@Override
@@ -306,7 +303,7 @@ public class LuvMotionReality extends ApplicationGL {
 	}
 
 	@Override
-	public void draw(Graphic g) {
+	public void draw(Graphics g) {
 
 		//Draw Gui
 		g.setColor(Color.WHITE);
@@ -325,7 +322,7 @@ public class LuvMotionReality extends ApplicationGL {
 
 	}
 
-	protected void drawPipCamera(Graphic g) {
+	protected void drawPipCamera(Graphics g) {
 
 		//AffineTransform transform = AffineTransform.getScaleInstance(640/w, 480/h);
 		AffineTransform transform = AffineTransform.getScaleInstance(0.2, 0.2);

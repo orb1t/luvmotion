@@ -14,7 +14,7 @@ import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.event.MouseButton;
 import br.com.etyllica.core.event.PointerEvent;
-import br.com.etyllica.core.graphics.Graphic;
+import br.com.etyllica.core.graphics.Graphics;
 import br.com.etyllica.core.linear.Point3D;
 import br.com.etyllica.motion.feature.Component;
 import br.com.etyllica.motion.filter.ColorFilter;
@@ -132,7 +132,7 @@ public class MotionSphere extends LuvMotionReality {
 	}
 
 	@Override
-	public GUIEvent updateKeyboard(KeyEvent event) {
+	public void updateKeyboard(KeyEvent event) {
 
 		if(event.isKeyDown(KeyEvent.VK_D)) {
 			scene.offsetX(+offset);
@@ -176,10 +176,9 @@ public class MotionSphere extends LuvMotionReality {
 			cameraGL.offsetY(+0.5);
 		}
 		
-		return GUIEvent.NONE;
 	}
 
-	public GUIEvent updateMouse(PointerEvent event) {
+	public void updateMouse(PointerEvent event) {
 
 		mx = event.getX();
 		my = event.getY();
@@ -198,7 +197,6 @@ public class MotionSphere extends LuvMotionReality {
 			cameraGL.setTarget(sphere);
 		}
 		
-		return GUIEvent.NONE;
 	}
 
 	@Override
@@ -245,7 +243,7 @@ public class MotionSphere extends LuvMotionReality {
 	}
 	
 	@Override
-	public void draw(Graphic g) {
+	public void draw(Graphics g) {
 
 		drawPipCamera(g);
 		
@@ -267,7 +265,7 @@ public class MotionSphere extends LuvMotionReality {
 		drawCoordinates(g, cameraGL);
 	}
 	
-	private void drawCoordinates(Graphic g, Point3D point) {
+	private void drawCoordinates(Graphics g, Point3D point) {
 
 		g.setColor(Color.WHITE);
 		g.setShadowColor(Color.BLACK);

@@ -15,11 +15,10 @@ import javax.media.opengl.glu.GLU;
 
 import br.com.etyllica.awt.SVGColor;
 import br.com.etyllica.core.context.UpdateIntervalListener;
-import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.event.MouseButton;
 import br.com.etyllica.core.event.PointerEvent;
-import br.com.etyllica.core.graphics.Graphic;
+import br.com.etyllica.core.graphics.Graphics;
 import br.com.etyllica.core.linear.Point3D;
 import br.com.etyllica.motion.feature.Component;
 import br.com.etyllica.motion.feature.trail.TripleAxisTrail;
@@ -251,7 +250,7 @@ public class DualMotionSpheres extends LuvMotionReality implements UpdateInterva
 	}
 
 	@Override
-	public GUIEvent updateKeyboard(KeyEvent event) {
+	public void updateKeyboard(KeyEvent event) {
 
 		if(event.isKeyDown(KeyEvent.VK_M)) {
 			scene.offsetAngleZ(-5);
@@ -272,8 +271,6 @@ public class DualMotionSpheres extends LuvMotionReality implements UpdateInterva
 				keyStates.put(key, false);
 			}
 		}
-
-		return GUIEvent.NONE;
 	}
 
 	protected void registerKey(int keyCode) {
@@ -285,7 +282,7 @@ public class DualMotionSpheres extends LuvMotionReality implements UpdateInterva
 		return keyStates.get(keyCode);
 	}
 
-	public GUIEvent updateMouse(PointerEvent event) {
+	public void updateMouse(PointerEvent event) {
 
 		mx = event.getX();
 		my = event.getY();
@@ -303,8 +300,6 @@ public class DualMotionSpheres extends LuvMotionReality implements UpdateInterva
 		if(event.isButtonUp(MouseButton.MOUSE_BUTTON_RIGHT)) {
 			cameraGL.setTarget(orange);
 		}
-
-		return GUIEvent.NONE;
 	}
 
 	@Override
@@ -376,7 +371,7 @@ public class DualMotionSpheres extends LuvMotionReality implements UpdateInterva
 	}
 
 	@Override
-	public void draw(Graphic g) {
+	public void draw(Graphics g) {
 
 		drawPipCamera(g);
 
@@ -407,12 +402,12 @@ public class DualMotionSpheres extends LuvMotionReality implements UpdateInterva
 		return component.getPointCount();
 	}
 
-	private void drawRadius(Graphic g, Component component) {
+	private void drawRadius(Graphics g, Component component) {
 		int radius = calculateRadius(component);
 		g.drawStringShadow(component.getX(),component.getY()-windowHeight, component.getW(), component.getH(), Integer.toString(radius));
 	}
 
-	protected void drawFeature(Graphic g, Component component) {
+	protected void drawFeature(Graphics g, Component component) {
 		if(component == null) {
 			return;
 		}
@@ -422,7 +417,7 @@ public class DualMotionSpheres extends LuvMotionReality implements UpdateInterva
 		drawRadius(g, component);
 	}
 
-	private void drawCoordinates(Graphic g, Point3D point) {
+	private void drawCoordinates(Graphics g, Point3D point) {
 		g.setColor(Color.WHITE);
 		g.setShadowColor(Color.BLACK);
 

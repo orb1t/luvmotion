@@ -4,13 +4,9 @@ import java.awt.Color;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
-import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
 
-import br.com.etyllica.core.event.GUIEvent;
-import br.com.etyllica.core.event.KeyEvent;
-import br.com.etyllica.core.event.PointerEvent;
-import br.com.etyllica.core.graphics.Graphic;
+import br.com.etyllica.core.graphics.Graphics;
 import br.com.etyllica.motion.camera.Camera;
 import br.com.etyllica.motion.camera.CameraV4L4J;
 import br.com.luvia.core.context.ApplicationGL;
@@ -79,7 +75,7 @@ public class PositExample extends ApplicationGL {
 	}
 	
 	@Override
-	public void draw(Graphic g) {
+	public void draw(Graphics g) {
 
 		//Draw Gui
 		g.setColor(Color.WHITE);
@@ -87,18 +83,6 @@ public class PositExample extends ApplicationGL {
 
 		g.drawImage(camera.getBufferedImage(), 0, 0);
 
-	}
-
-	@Override
-	public GUIEvent updateMouse(PointerEvent event) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public GUIEvent updateKeyboard(KeyEvent event) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 }
