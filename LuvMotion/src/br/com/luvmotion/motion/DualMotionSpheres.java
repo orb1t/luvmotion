@@ -25,8 +25,8 @@ import br.com.etyllica.motion.feature.trail.TripleAxisTrail;
 import br.com.etyllica.motion.feature.trail.TripleAxisTrailListener;
 import br.com.etyllica.motion.filter.ColorFilter;
 import br.com.etyllica.motion.model.RangeFlag;
-import br.com.luvia.core.video.Graphics3D;
-import br.com.luvia.geom.Sphere;
+import br.com.luvia.core.graphics.Graphics3D;
+import br.com.luvia.graphics.Sphere;
 import br.com.luvmotion.ar.LuvMotionReality;
 import br.com.luvmotion.model.Gesture;
 
@@ -44,10 +44,10 @@ public class DualMotionSpheres extends LuvMotionReality implements UpdateInterva
 	private Sphere orange;
 	private Sphere blue;
 
-	private double offset = 0.05;
-	private double turnSpeed = 2;
+	private float offset = 0.05f;
+	private float turnSpeed = 2f;
 
-	private double offsetBall = 0.06;
+	private float offsetBall = 0.06f;
 
 	private boolean needReset = false;
 
@@ -91,8 +91,8 @@ public class DualMotionSpheres extends LuvMotionReality implements UpdateInterva
 		orange.setColor(orangeColor);
 
 		blue = new Sphere(MotionSphere.BALL_RADIUS_TABLE_TENNIS);
-		blue.setY(0.5);
-		blue.setX(-0.64);
+		blue.setY(0.5f);
+		blue.setX(-0.64f);
 		blue.setColor(blueColor);
 
 		//Load Color Filter based on PipCamera attributes
@@ -132,8 +132,8 @@ public class DualMotionSpheres extends LuvMotionReality implements UpdateInterva
 	public void timeUpdate(long now) {
 		needReset = true;
 
-		orangeTrail.add(orange);
-		blueTrail.add(blue);
+		orangeTrail.add(orange.position());
+		blueTrail.add(blue.position());
 
 		//Move Camera
 		if(isPressed(KeyEvent.VK_CTRL_RIGHT)||isPressed(KeyEvent.VK_CTRL_LEFT)) {
@@ -298,7 +298,7 @@ public class DualMotionSpheres extends LuvMotionReality implements UpdateInterva
 		}
 
 		if(event.isButtonUp(MouseButton.MOUSE_BUTTON_RIGHT)) {
-			cameraGL.setTarget(orange);
+			cameraGL.setTarget(orange.position());
 		}
 	}
 

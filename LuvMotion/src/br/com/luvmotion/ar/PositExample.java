@@ -10,7 +10,7 @@ import br.com.etyllica.core.graphics.Graphics;
 import br.com.etyllica.motion.camera.Camera;
 import br.com.etyllica.motion.camera.CameraV4L4J;
 import br.com.luvia.core.context.ApplicationGL;
-import br.com.luvia.core.video.Graphics3D;
+import br.com.luvia.core.graphics.Graphics3D;
 
 public class PositExample extends ApplicationGL {
 

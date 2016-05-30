@@ -20,7 +20,7 @@ import br.com.etyllica.motion.math.interpolation.QuadraticInterpolator;
 import br.com.etyllica.motion.modifier.PositCoplanarModifier;
 import br.com.etyllica.motion.modifier.hull.HullModifier;
 import br.com.etyllica.motion.modifier.ogr.RectangularOGRModifier;
-import br.com.luvia.core.video.Graphics3D;
+import br.com.luvia.core.graphics.Graphics3D;
 
 public class PositProcessingGL extends LuvMotionReality {
 

@@ -10,7 +10,6 @@ import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 import br.com.etyllica.awt.SVGColor;
-import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.event.MouseButton;
 import br.com.etyllica.core.event.PointerEvent;
@@ -18,8 +17,8 @@ import br.com.etyllica.core.graphics.Graphics;
 import br.com.etyllica.core.linear.Point3D;
 import br.com.etyllica.motion.feature.Component;
 import br.com.etyllica.motion.filter.ColorFilter;
-import br.com.luvia.core.video.Graphics3D;
-import br.com.luvia.geom.Sphere;
+import br.com.luvia.core.graphics.Graphics3D;
+import br.com.luvia.graphics.Sphere;
 import br.com.luvmotion.ar.LuvMotionReality;
 
 public class MotionSphere extends LuvMotionReality {
@@ -194,7 +193,7 @@ public class MotionSphere extends LuvMotionReality {
 		}
 		
 		if(event.isButtonUp(MouseButton.MOUSE_BUTTON_RIGHT)) {
-			cameraGL.setTarget(sphere);
+			cameraGL.setTarget(sphere.position());
 		}
 		
 	}
