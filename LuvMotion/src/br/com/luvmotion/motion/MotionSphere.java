@@ -9,6 +9,8 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
+import com.badlogic.gdx.math.Vector3;
+
 import br.com.etyllica.awt.SVGColor;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.event.MouseButton;
@@ -67,8 +69,8 @@ public class MotionSphere extends LuvMotionReality {
 	public void load() {
 		super.load();
 				
-		cameraGL.setY(1.5);
-		cameraGL.setX(2.6);
+		cameraGL.setY(1.5f);
+		cameraGL.setX(2.6f);
 		
 		sphere = new Sphere(BALL_RADIUS_TABLE_TENNIS);
 		sphere.setX(1);
@@ -134,21 +136,21 @@ public class MotionSphere extends LuvMotionReality {
 	public void updateKeyboard(KeyEvent event) {
 
 		if(event.isKeyDown(KeyEvent.VK_D)) {
-			scene.offsetX(+offset);
+			scene.x += offset;
 		} else if(event.isKeyDown(KeyEvent.VK_A)) {
-			scene.offsetX(-offset);
+			scene.x -= offset;
 		}
 
 		if(event.isKeyDown(KeyEvent.VK_W)) {
-			scene.offsetY(+offset);
+			scene.y += offset;
 		} else if(event.isKeyDown(KeyEvent.VK_S)) {
-			scene.offsetY(-offset);
+			scene.y -= offset;
 		}
 
 		if(event.isKeyDown(KeyEvent.VK_Q)) {
-			scene.offsetZ(+offset);
+			scene.z += offset;
 		} else if(event.isKeyDown(KeyEvent.VK_E)) {
-			scene.offsetZ(-offset);
+			scene.z -= offset;
 		}
 
 		if(event.isKeyDown(KeyEvent.VK_UP_ARROW)) {
@@ -170,9 +172,9 @@ public class MotionSphere extends LuvMotionReality {
 		}
 		
 		if(event.isKeyDown(KeyEvent.VK_Z)) {
-			cameraGL.offsetY(-0.5);
+			cameraGL.offsetY(-0.5f);
 		} else if(event.isKeyDown(KeyEvent.VK_X)) {
-			cameraGL.offsetY(+0.5);
+			cameraGL.offsetY(+0.5f);
 		}
 		
 	}
@@ -193,7 +195,7 @@ public class MotionSphere extends LuvMotionReality {
 		}
 		
 		if(event.isButtonUp(MouseButton.MOUSE_BUTTON_RIGHT)) {
-			cameraGL.setTarget(sphere.position());
+			cameraGL.setTarget(sphere.position);
 		}
 		
 	}
@@ -258,20 +260,20 @@ public class MotionSphere extends LuvMotionReality {
 		g.drawShadow(20,60, "AngleY: "+(scene.getAngleY()));		
 		
 		g.drawShadow(20,100, "DistanceX: "+(sphere.getX()));
-		g.drawShadow(20,120, "DistanceY: "+(cameraGL.getY()+scene.getY()));
-		g.drawShadow(20,140, "DistanceZ: "+(cameraGL.getZ()+scene.getZ()));
+		g.drawShadow(20,120, "DistanceY: "+(cameraGL.getY()+scene.y));
+		g.drawShadow(20,140, "DistanceZ: "+(cameraGL.getZ()+scene.z));
 		
-		drawCoordinates(g, cameraGL);
+		drawCoordinates(g, cameraGL.position);
 	}
 	
-	private void drawCoordinates(Graphics g, Point3D point) {
+	private void drawCoordinates(Graphics g, Vector3 point) {
 
 		g.setColor(Color.WHITE);
 		g.setShadowColor(Color.BLACK);
 		
-		g.drawShadow(500,20, "X: "+(point.getX()));
-		g.drawShadow(500,40, "Y: "+(point.getY()));
-		g.drawShadow(500,60, "Z: "+(point.getZ()));
+		g.drawShadow(500,20, "X: "+(point.x));
+		g.drawShadow(500,40, "Y: "+(point.y));
+		g.drawShadow(500,60, "Z: "+(point.z));
 	}
 
 }

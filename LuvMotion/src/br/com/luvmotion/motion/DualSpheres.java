@@ -13,6 +13,8 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
+import com.badlogic.gdx.math.Vector3;
+
 import br.com.etyllica.awt.SVGColor;
 import br.com.etyllica.core.context.UpdateIntervalListener;
 import br.com.etyllica.core.event.KeyEvent;
@@ -76,7 +78,7 @@ public class DualSpheres extends LuvMotionReality implements UpdateIntervalListe
 	public void load() {
 		super.load();
 
-		cameraGL.setY(1.5);
+		cameraGL.setY(1.5f);
 		cameraGL.setZ(3);//Distance in Meters
 
 		orange = new Sphere(MotionSphere.BALL_RADIUS_TABLE_TENNIS);
@@ -125,28 +127,28 @@ public class DualSpheres extends LuvMotionReality implements UpdateIntervalListe
 	public void timeUpdate(long now) {
 		needReset = true;
 
-		orangeTrail.add(orange.position());
-		blueTrail.add(blue.position());
+		orangeTrail.add(orange.position);
+		blueTrail.add(blue.position);
 
 		//Move Camera
 		if(isPressed(KeyEvent.VK_CTRL_RIGHT)||isPressed(KeyEvent.VK_CTRL_LEFT)) {
 
 			if(isPressed(KeyEvent.VK_D)) {
-				scene.offsetX(+offset);
+				scene.x += offset;
 			} else if(isPressed(KeyEvent.VK_A)) {
-				scene.offsetX(-offset);
+				scene.x -= -offset;
 			}
 
 			if(isPressed(KeyEvent.VK_W)) {
-				scene.offsetZ(+offset);
+				scene.z += offset;
 			} else if(isPressed(KeyEvent.VK_S)) {
-				scene.offsetZ(-offset);
+				scene.z -= -offset;
 			}
 
 			if(isPressed(KeyEvent.VK_Q)) {
-				scene.offsetY(+offset);
+				scene.y += offset;
 			} else if(isPressed(KeyEvent.VK_E)) {
-				scene.offsetY(-offset);
+				scene.y -= -offset;
 			}
 
 			if(isPressed(KeyEvent.VK_UP_ARROW)) {
@@ -252,9 +254,9 @@ public class DualSpheres extends LuvMotionReality implements UpdateIntervalListe
 		}
 
 		if(event.isKeyDown(KeyEvent.VK_Z)) {
-			cameraGL.offsetY(-0.5);
+			cameraGL.offsetY(-0.5f);
 		} else if(event.isKeyDown(KeyEvent.VK_X)) {
-			cameraGL.offsetY(+0.5);
+			cameraGL.offsetY(+0.5f);
 		}
 
 		for(Integer key: registeredKeys) {
@@ -291,7 +293,7 @@ public class DualSpheres extends LuvMotionReality implements UpdateIntervalListe
 		}
 
 		if(event.isButtonUp(MouseButton.MOUSE_BUTTON_RIGHT)) {
-			cameraGL.setTarget(orange.position());
+			cameraGL.setTarget(orange.position);
 		}
 
 	}
@@ -372,10 +374,10 @@ public class DualSpheres extends LuvMotionReality implements UpdateIntervalListe
 		g.drawShadow(20,60, "AngleY: "+(scene.getAngleY()));		
 
 		g.drawShadow(20,100, "DistanceX: "+(orange.getX()));
-		g.drawShadow(20,120, "DistanceY: "+(cameraGL.getY()+scene.getY()));
-		g.drawShadow(20,140, "DistanceZ: "+(cameraGL.getZ()+scene.getZ()));
+		g.drawShadow(20,120, "DistanceY: "+(cameraGL.getY()+scene.y));
+		g.drawShadow(20,140, "DistanceZ: "+(cameraGL.getZ()+scene.z));
 
-		drawCoordinates(g, cameraGL);
+		drawCoordinates(g, cameraGL.position);
 	}
 
 	private int calculateRadius(Component component) {
@@ -397,13 +399,13 @@ public class DualSpheres extends LuvMotionReality implements UpdateIntervalListe
 		drawRadius(g, component);
 	}
 
-	private void drawCoordinates(Graphics g, Point3D point) {
+	private void drawCoordinates(Graphics g, Vector3 position) {
 		g.setColor(Color.WHITE);
 		g.setShadowColor(Color.BLACK);
 
-		g.drawShadow(500,20, "X: "+(point.getX()));
-		g.drawShadow(500,40, "Y: "+(point.getY()));
-		g.drawShadow(500,60, "Z: "+(point.getZ()));
+		g.drawShadow(500,20, "X: "+(position.x));
+		g.drawShadow(500,40, "Y: "+(position.y));
+		g.drawShadow(500,60, "Z: "+(position.z));
 	}
 
 }

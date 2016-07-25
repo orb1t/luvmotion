@@ -9,7 +9,7 @@ public class RealityScene extends AimPoint {
 	public RealityScene() { }
 	
 	public RealityScene(double angleX, double angleY, double angleZ,
-			double offsetX, double offsetY, double offsetZ) {
+			float offsetX, float offsetY, float offsetZ) {
 		this.angleX = angleX;
 		this.angleY = angleY;
 		this.angleZ = angleZ;

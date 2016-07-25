@@ -166,8 +166,8 @@ public class LuvMotionReality extends ApplicationGL {
 
 	}	
 
-	private double offset = 0.5;
-	private double offsetTurn = 0.5;
+	private float offset = 0.5f;
+	private float offsetTurn = 0.5f;
 	
 	private boolean turnUp = false;
 	private boolean turnDown = false;
@@ -194,21 +194,21 @@ public class LuvMotionReality extends ApplicationGL {
 	public void updateKeyboard(KeyEvent event) {
 
 		if(event.isKeyDown(KeyEvent.VK_D)) {
-			scene.offsetX(+offset);
+			scene.x += offset;
 		} else if(event.isKeyDown(KeyEvent.VK_A)) {
-			scene.offsetX(-offset);
+			scene.x -= offset;
 		}
 
 		if(event.isKeyDown(KeyEvent.VK_W)) {
-			scene.offsetY(+offset);
+			scene.y += offset;
 		} else if(event.isKeyDown(KeyEvent.VK_S)) {
-			scene.offsetY(-offset);
+			scene.y -= offset;
 		}
 
 		if(event.isKeyDown(KeyEvent.VK_Q)) {
-			scene.offsetZ(+offset);
+			scene.z += offset;
 		} else if(event.isKeyDown(KeyEvent.VK_E)) {
-			scene.offsetZ(-offset);
+			scene.z -= offset;
 		}
 
 		if(event.isKeyDown(KeyEvent.VK_UP_ARROW)) {
