@@ -20,7 +20,7 @@ public class LuvMotion extends Luvia {
 
 		LuvMotion luvmotion = new LuvMotion();
 		
-		luvmotion.init();		
+		luvmotion.init();
 	}
 	
 	@Override

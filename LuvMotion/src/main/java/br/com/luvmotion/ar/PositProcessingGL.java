@@ -74,7 +74,7 @@ public class PositProcessingGL extends LuvMotionReality {
 		cornerFilter = new SoftFloodFillSearch(width, height);
 		cornerFilter.addValidation(new MaxDensityValidation(w));
 		
-		cornerFilter.setBorder(10);		
+		cornerFilter.setBorder(10);
 		cornerFilter.setStep(1);
 		cornerFilter.setPixelStrategy(colorStrategy);
 
